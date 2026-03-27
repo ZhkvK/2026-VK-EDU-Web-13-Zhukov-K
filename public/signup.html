@@ -1,0 +1,182 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Ask Apple</title>
+    <link rel="icon" type="image/png" href="static/img/Logo.png" />
+    <link href="static/css/bootstrap.css" rel="stylesheet" />
+  </head>
+
+  <body class="d-flex flex-column min-vh-100">
+    <!-- Навигация -->
+    <header>
+      <nav class="navbar navbar-expand-lg bg-dark" data-bs-theme="dark">
+        <div class="container">
+          <div class="d-flex align-items-center justify-content-between">
+            <a href="index.html" class="text-decoration-none">
+              <img
+                src="static/img/Logo.png"
+                alt="Logo"
+                class="rounded-circle"
+                width="50"
+                height="50"
+              />
+            </a>
+            <a class="navbar-brand" href="index.html">AskApple</a>
+          </div>
+
+          <button
+            class="navbar-toggler"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent"
+            aria-expanded="false"
+            aria-label="Toggle navigation"
+          >
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div
+            class="collapse navbar-collapse flex-lg-row justify-content-lg-between ms-lg-4 mt-3 mt-lg-0"
+            id="navbarSupportedContent"
+          >
+            <form
+              class="d-flex flex-column flex-lg-row gap-2 justify-content-center"
+              role="search"
+            >
+              <input
+                class="form-control"
+                type="search"
+                placeholder="Найти вопрос"
+              />
+              <div class="d-flex gap-2 justify-content-lg-start">
+                <button class="btn btn-success flex-shrink-0" type="submit">
+                  Поиск
+                </button>
+                <a
+                  class="btn btn-primary flex-shrink-0"
+                  href="ask.html"
+                  role="button"
+                  >+Ask!</a
+                >
+              </div>
+            </form>
+            <div
+              class="ms-2 ms-lg-3 me-3 d-flex gap-3 mt-3 mt-lg-0 align-items-baseline"
+            >
+              <a href="login.html" class="link-light text-decoration-none"
+                >Войти</a
+              >
+              <a class="btn btn-light" href="signup.html" role="button"
+                >Регистрация</a
+              >
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container flex-grow-1 mt-3 align-items-center">
+      <h1 class="text-center mt-5 mb-5">Добро пожаловать в AskApple!</h1>
+      
+      <!-- Сообщение об ошибке регистрации (скрыто по умолчанию классом d-none) -->
+      <div class="alert alert-danger d-none" role="alert" id="serverErrorAlert">
+        Пользователь с таким email уже существует.
+      </div>
+
+      <!-- Убран класс was-validated -->
+      <form class="row g-3 needs-validation" novalidate>
+        <div class="col-12">
+          <label for="validationDefault01" class="form-label"
+            >Адрес электронной почты</label
+          >
+          <input
+            type="email"
+            class="form-control"
+            id="validationDefault01"
+            required
+          />
+          <div class="invalid-feedback">
+            Пожалуйста, введите корректный email адрес.
+          </div>
+        </div>
+
+        <div class="col-12">
+          <label for="validationDefault02" class="form-label"
+            >Имя пользователя</label
+          >
+          <input
+            type="text"
+            class="form-control"
+            id="validationDefault02"
+            required
+            minlength="3"
+            maxlength="20"
+          />
+          <div class="invalid-feedback">
+            Пожалуйста, введите имя пользователя (3-20 символов).
+          </div>
+        </div>
+
+        <div class="col-12">
+          <label for="validationDefault03" class="form-label">Пароль</label>
+          <input
+            type="password"
+            class="form-control"
+            id="validationDefault03"
+            required
+            minlength="8"
+            maxlength="20"
+            pattern="(?=.*\d)(?=.*[a-zA-Z])[a-zA-Z0-9]{8,20}"
+          />
+          <div class="invalid-feedback">
+            Ваш пароль должен быть 8-20 символов, содержать буквы и цифры, без
+            пробелов и спецсимволов.
+          </div>
+          <div class="form-text">Минимум 8 символов, буквы и цифры.</div>
+        </div>
+
+        <div class="col-12">
+          <div class="form-check">
+            <input
+              class="form-check-input"
+              type="checkbox"
+              value=""
+              id="invalidCheck2"
+              required
+            />
+            <label class="form-check-label" for="invalidCheck2">
+              Agree to terms and conditions
+            </label>
+            <div class="invalid-feedback">
+              Вы должны согласиться с условиями перед отправкой.
+            </div>
+          </div>
+        </div>
+
+        <div class="col-12">
+          <button class="btn btn-primary" type="submit">
+            Зарегистрироваться
+          </button>
+        </div>
+      </form>
+
+      <div class="mt-3">
+        <p>Уже есть аккаунт? <a href="login.html">Войти</a></p>
+      </div>
+    </main>
+
+    <!-- Футер -->
+    <footer class="bg-dark text-white text-center py-3 mt-auto">
+      <div class="container">
+        <p class="mb-0">© 2026 Knowledge Base</p>
+      </div>
+    </footer>
+
+    <script src="static/js/bootstrap.bundle.js"></script>
+
+    <!-- Скрипт валидации формы -->
+    <script src="static/js/main.js"></script>
+  </body>
+</html>

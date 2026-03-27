@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Ask Apple</title>
+    <link rel="icon" type="image/png" href="static/img/Logo.png" />
+    <link href="static/css/bootstrap.css" rel="stylesheet" />
+  </head>
+
+  <body class="d-flex flex-column min-vh-100">
+    <!-- Навигация -->
+    <header>
+      <nav class="navbar navbar-expand-lg bg-dark" data-bs-theme="dark">
+        <div class="container">
+          <div class="d-flex align-items-center justify-content-between">
+            <a href="index.html" class="text-decoration-none">
+              <img
+                src="static/img/Logo.png"
+                alt="Logo"
+                class="rounded-circle"
+                width="50"
+                height="50"
+              />
+            </a>
+            <a class="navbar-brand" href="index.html">AskApple</a>
+          </div>
+
+          <button
+            class="navbar-toggler"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent"
+            aria-expanded="false"
+            aria-label="Toggle navigation"
+          >
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div
+            class="collapse navbar-collapse flex-lg-row justify-content-lg-between ms-lg-4 mt-3 mt-lg-0"
+            id="navbarSupportedContent"
+          >
+            <form
+              class="d-flex flex-column flex-lg-row gap-2 justify-content-center"
+              role="search"
+            >
+              <input
+                class="form-control"
+                type="search"
+                placeholder="Найти вопрос"
+              />
+              <div class="d-flex gap-2 justify-content-lg-start">
+                <button class="btn btn-success flex-shrink-0" type="submit">
+                  Поиск
+                </button>
+                <a
+                  class="btn btn-primary flex-shrink-0"
+                  href="ask.html"
+                  role="button"
+                  >+Ask!</a
+                >
+              </div>
+            </form>
+            <div
+              class="ms-2 ms-lg-3 me-3 d-flex gap-3 mt-3 mt-lg-0 align-items-baseline"
+            >
+              <a href="login.html" class="link-light text-decoration-none"
+                >Войти</a
+              >
+              <a class="btn btn-light" href="signup.html" role="button"
+                >Регистрация</a
+              >
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container flex-grow-1 mt-3 align-items-center">
+      <h1 class="text-center mt-5 mb-5">Добро пожаловать в AskApple!</h1>
+      <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <i class="bi bi-exclamation-triangle-fill"></i> Неверный логин или
+        пароль.
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="alert"
+        ></button>
+      </div>
+      <div class="mb-3">
+        <label for="formGroupExampleInput" class="form-label"
+          >Адрес электронной почты</label
+        >
+        <input
+          type="text"
+          class="form-control"
+          id="formGroupExampleInput"
+          placeholder="Введите e-mail"
+        />
+      </div>
+      <label for="inputPassword5" class="form-label">Пароль</label>
+      <input
+        type="password"
+        id="inputPassword5"
+        class="form-control"
+        placeholder="Введите пароль"
+        aria-describedby="passwordHelpBlock"
+      />
+      <div id="passwordHelpBlock" class="form-text mt-2">
+        <a href="#">Забыли пароль?</a>
+      </div>
+      <div class="form-text">
+        <a href="signup.html">Зарегистрироваться</a>
+      </div>
+
+      <div class="d-grid mt-5 mb-5">
+        <a class="btn btn-primary" href="login.html" role="button">Войти</a>
+      </div>
+    </main>
+
+    <!-- Футер -->
+    <footer class="bg-dark text-white text-center py-3 mt-auto">
+      <div class="container">
+        <p class="mb-0">© 2026 Knowledge Base</p>
+      </div>
+    </footer>
+
+    <script src="static/js/bootstrap.bundle.js"></script>
+  </body>
+</html>
