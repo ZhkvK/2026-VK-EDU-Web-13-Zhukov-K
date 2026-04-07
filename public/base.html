@@ -1,0 +1,443 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Ask Apple</title>
+    <link rel="icon" type="image/png" href="static/img/Logo.png" />
+    <link href="static/css/bootstrap.css" rel="stylesheet" />
+    <link rel="stylesheet" href="static/css/bootstrap-icons.css">
+  </head>
+
+  <body class="d-flex flex-column min-vh-100">
+    <!-- Навигация -->
+    <header>
+      <nav class="navbar navbar-expand-lg bg-dark" data-bs-theme="dark">
+        <div class="container">
+          <div class="d-flex align-items-center justify-content-between">
+            <a href="index.html" class="text-decoration-none">
+              <img
+                src="static/img/Logo.png"
+                alt="Logo"
+                class="rounded-circle"
+                width="50"
+                height="50"
+              />
+            </a>
+            <a class="navbar-brand" href="index.html">AskApple</a>
+          </div>
+
+          <button
+            class="navbar-toggler"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent"
+            aria-expanded="false"
+            aria-label="Toggle navigation"
+          >
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div
+            class="collapse navbar-collapse flex-lg-row justify-content-lg-between ms-lg-4 mt-3 mt-lg-0"
+            id="navbarSupportedContent"
+          >
+            <form
+              class="d-flex flex-column flex-lg-row gap-2 justify-content-center"
+              role="search"
+            >
+              <input
+                class="form-control"
+                type="search"
+                placeholder="Найти вопрос"
+              />
+              <div class="d-flex gap-2 justify-content-lg-start">
+                <button class="btn btn-success flex-shrink-0" type="submit">
+                  Поиск
+                </button>
+                <a
+                  class="btn btn-primary flex-shrink-0"
+                  href="ask.html"
+                  role="button"
+                  >+Ask!</a
+                >
+              </div>
+            </form>
+            <div
+              class="ms-2 ms-lg-3 me-3 d-flex gap-3 mt-3 mt-lg-0 align-items-baseline"
+            >
+              <a href="login.html" class="link-light text-decoration-none"
+                >Войти</a
+              >
+              <a class="btn btn-light" href="signup.html" role="button"
+                >Регистрация</a
+              >
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container flex-grow-1 mt-3">
+      <div class="d-flex align-items-baseline gap-2 mb-3">
+        <h1>Новые вопросы</h1>
+        <a href="#" class="text-muted ms-2">Популярное</a>
+      </div>
+      <div class="row p-0">
+        <!-- Карточки -->
+        <section class="col-12 col-lg-9 order-2 order-lg-1">
+          
+          <!-- Карточка 1 -->
+          <div class="card mb-3">
+            <div class="row g-0">
+              <div class="col-md-2">
+                <div
+                  class="d-flex flex-row flex-md-column align-items-center justify-content-md-center h-100 p-3 gap-3 gap-md-2 bg-light"
+                >
+                  <a href="#" class="text-decoration-none">
+                    <img
+                      src="static/img/profile_image_dummy.png"
+                      class="rounded-circle"
+                      alt="User1"
+                      style="width: 60px; height: 60px; object-fit: cover"
+                    />
+                  </a>
+                  <a
+                    href="question.html"
+                    class="text-decoration-none text-center"
+                    >Ответы (3)</a
+                  >
+                </div>
+              </div>
+              <div class="col-md-10">
+                <div class="card-body">
+                  <h5 class="card-title">
+                    <a href="question.html" class="text-decoration-none"
+                      >Вопрос1</a
+                    >
+                  </h5>
+                  <p class="card-text">
+                    This is a wider card with supporting text below as a natural
+                    lead-in to additional content. This content is a little bit
+                    longer.
+                  </p>
+                  <div
+                    class="d-flex justify-content-between align-items-baseline"
+                  >
+                    <p class="card-text mb-0">
+                      <small class="text-body-secondary"
+                        >Обновлен 3 минуты назад</small
+                      >
+                    </p>
+                    
+                    <div class="d-flex align-items-center gap-2 vote-group">
+                      <button type="button" class="btn btn-outline-success btn-sm btn-like d-flex align-items-center gap-1">
+                        <i class="bi bi-hand-thumbs-up"></i>
+                        <span class="vote-count">12</span>
+                      </button>
+                      <button type="button" class="btn btn-outline-danger btn-sm btn-dislike d-flex align-items-center gap-1">
+                        <i class="bi bi-hand-thumbs-down"></i>
+                        <span class="vote-count">2</span>
+                      </button>
+                    </div>
+
+                  </div>
+                  <div class="d-flex mt-2 gap-1">
+                    <a href="#" class="rounded-pill badge text-bg-primary text-decoration-none">Tag1</a>
+                    <a href="#" class="rounded-pill badge text-bg-secondary text-decoration-none">Tag2</a>
+                    <a href="#" class="badge rounded-pill text-bg-warning text-decoration-none">Tag3</a>
+                    <a href="#" class="badge rounded-pill text-bg-info text-decoration-none">Tag4</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Карточка 2 -->
+          <div class="card mb-3">
+            <div class="row g-0">
+              <div class="col-md-2">
+                <div
+                  class="d-flex flex-row flex-md-column align-items-center justify-content-md-center h-100 p-3 gap-3 gap-md-2 bg-light"
+                >
+                  <a href="#" class="text-decoration-none">
+                    <img
+                      src="static/img/profile_image_dummy.png"
+                      class="rounded-circle"
+                      alt="User2"
+                      style="width: 60px; height: 60px; object-fit: cover"
+                    />
+                  </a>
+                  <a
+                    href="question.html"
+                    class="text-decoration-none text-center"
+                    >Ответы (3)</a
+                  >
+                </div>
+              </div>
+              <div class="col-md-10">
+                <div class="card-body">
+                  <h5 class="card-title">
+                    <a href="question.html" class="text-decoration-none"
+                      >Вопрос2</a
+                    >
+                  </h5>
+                  <p class="card-text">
+                    This is a wider card with supporting text below as a natural
+                    lead-in to additional content. This content is a little bit
+                    longer.
+                  </p>
+                  <div
+                    class="d-flex justify-content-between align-items-baseline"
+                  >
+                    <p class="card-text mb-0">
+                      <small class="text-body-secondary"
+                        >Обновлен 3 минуты назад</small
+                      >
+                    </p>
+                    
+                    <div class="d-flex align-items-center gap-2 vote-group">
+                      <button type="button" class="btn btn-outline-success btn-sm btn-like d-flex align-items-center gap-1">
+                        <i class="bi bi-hand-thumbs-up"></i>
+                        <span class="vote-count">12</span>
+                      </button>
+                      <button type="button" class="btn btn-outline-danger btn-sm btn-dislike d-flex align-items-center gap-1">
+                        <i class="bi bi-hand-thumbs-down"></i>
+                        <span class="vote-count">2</span>
+                      </button>
+                    </div>
+
+                  </div>
+                  <div class="d-flex mt-2 gap-1">
+                    <a href="#" class="rounded-pill badge text-bg-primary text-decoration-none">Tag1</a>
+                    <a href="#" class="rounded-pill badge text-bg-secondary text-decoration-none">Tag2</a>
+                    <a href="#" class="badge rounded-pill text-bg-warning text-decoration-none">Tag3</a>
+                    <a href="#" class="badge rounded-pill text-bg-info text-decoration-none">Tag4</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Карточка 3 -->
+          <div class="card mb-3">
+            <div class="row g-0">
+              <div class="col-md-2">
+                <div
+                  class="d-flex flex-row flex-md-column align-items-center justify-content-md-center h-100 p-3 gap-3 gap-md-2 bg-light"
+                >
+                  <a href="#" class="text-decoration-none">
+                    <img
+                      src="static/img/profile_image_dummy.png"
+                      class="rounded-circle"
+                      alt="User3"
+                      style="width: 60px; height: 60px; object-fit: cover"
+                    />
+                  </a>
+                  <a
+                    href="question.html"
+                    class="text-decoration-none text-center"
+                    >Ответы (3)</a
+                  >
+                </div>
+              </div>
+              <div class="col-md-10">
+                <div class="card-body">
+                  <h5 class="card-title">
+                    <a href="question.html" class="text-decoration-none"
+                      >Вопрос3</a
+                    >
+                  </h5>
+                  <p class="card-text">
+                    This is a wider card with supporting text below as a natural
+                    lead-in to additional content. This content is a little bit
+                    longer.
+                  </p>
+                  <div
+                    class="d-flex justify-content-between align-items-baseline"
+                  >
+                    <p class="card-text mb-0">
+                      <small class="text-body-secondary"
+                        >Обновлен 3 минуты назад</small
+                      >
+                    </p>
+                    
+                    <div class="d-flex align-items-center gap-2 vote-group">
+                      <button type="button" class="btn btn-outline-success btn-sm btn-like d-flex align-items-center gap-1">
+                        <i class="bi bi-hand-thumbs-up"></i>
+                        <span class="vote-count">12</span>
+                      </button>
+                      <button type="button" class="btn btn-outline-danger btn-sm btn-dislike d-flex align-items-center gap-1">
+                        <i class="bi bi-hand-thumbs-down"></i>
+                        <span class="vote-count">2</span>
+                      </button>
+                    </div>
+
+                  </div>
+                  <div class="d-flex mt-2 gap-1">
+                    <a href="#" class="rounded-pill badge text-bg-primary text-decoration-none">Tag1</a>
+                    <a href="#" class="rounded-pill badge text-bg-secondary text-decoration-none">Tag2</a>
+                    <a href="#" class="badge rounded-pill text-bg-warning text-decoration-none">Tag3</a>
+                    <a href="#" class="badge rounded-pill text-bg-info text-decoration-none">Tag4</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Боковая колонка -->
+        <aside class="col-12 col-lg-3 order-1 order-lg-2 mb-4 mb-lg-0">
+          <!-- Блок: Популярные теги -->
+          <div class="card mb-3">
+            <div class="card-header bg-white fw-bold">Популярные теги</div>
+            <div class="card-body">
+              <div class="d-flex flex-wrap gap-2">
+                <a href="#" class="badge text-bg-primary text-decoration-none">python</a>
+                <a href="#" class="badge text-bg-secondary text-decoration-none">javascript</a>
+                <a href="#" class="badge text-bg-success text-decoration-none">html</a>
+                <a href="#" class="badge text-bg-danger text-decoration-none">css</a>
+                <a href="#" class="badge text-bg-warning text-dark text-decoration-none">bootstrap</a>
+                <a href="#" class="badge text-bg-info text-dark text-decoration-none">django</a>
+                <a href="#" class="badge text-bg-light text-dark border text-decoration-none">react</a>
+                <a href="#" class="badge text-bg-dark text-decoration-none">sql</a>
+              </div>
+            </div>
+          </div>
+
+          <!-- Блок: Лучшие участники -->
+          <div class="card mb-3">
+            <div class="card-header bg-white fw-bold">Лучшие участники</div>
+            <div class="card-body p-0">
+              <ul class="list-group list-group-flush">
+                <li class="list-group-item d-flex align-items-center gap-3">
+                  <img
+                    src="static/img/profile_image_dummy.png"
+                    alt="User"
+                    class="rounded-circle"
+                    width="40"
+                    height="40"
+                    style="object-fit: cover"
+                  />
+                  <div class="flex-grow-1">
+                    <a href="#" class="text-decoration-none fw-bold text-dark">User1</a>
+                    <div class="small text-muted">1,234 репутации</div>
+                  </div>
+                </li>
+
+                <li class="list-group-item d-flex align-items-center gap-3">
+                  <img
+                    src="static/img/profile_image_dummy.png"
+                    alt="User"
+                    class="rounded-circle"
+                    width="40"
+                    height="40"
+                    style="object-fit: cover"
+                  />
+                  <div class="flex-grow-1">
+                    <a href="#" class="text-decoration-none fw-bold text-dark">User2</a>
+                    <div class="small text-muted">987 репутации</div>
+                  </div>
+                </li>
+
+                <li class="list-group-item d-flex align-items-center gap-3">
+                  <img
+                    src="static/img/profile_image_dummy.png"
+                    alt="User"
+                    class="rounded-circle"
+                    width="40"
+                    height="40"
+                    style="object-fit: cover"
+                  />
+                  <div class="flex-grow-1">
+                    <a href="#" class="text-decoration-none fw-bold text-dark">User3</a>
+                    <div class="small text-muted">756 репутации</div>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="card-footer bg-white text-center">
+              <a href="#" class="text-decoration-none">Все участники →</a>
+            </div>
+          </div>
+        </aside>
+      </div>
+
+      <!-- Пагинация -->
+      <nav aria-label="Page navigation example">
+        <ul class="pagination">
+          <li class="page-item"><a class="page-link" href="#">
+            <i class="bi-arrow-left"></i>
+          </a></li>
+          <li class="page-item"><a class="page-link" href="#">1</a></li>
+          <li class="page-item"><a class="page-link" href="#">2</a></li>
+          <li class="page-item"><a class="page-link" href="#">3</a></li>
+          <li class="page-item"><a class="page-link" href="#">
+            <i class="bi-arrow-right"></i>
+          </a></li>
+        </ul>
+      </nav>
+    </main>
+
+    <!-- Футер -->
+    <footer class="bg-dark text-white text-center py-3 mt-auto">
+      <div class="container">
+        <p class="mb-0">© 2026 Knowledge Base</p>
+      </div>
+    </footer>
+
+    <script src="static/js/bootstrap.bundle.js"></script>
+    
+    <!-- Скрипт для обработки логики лайков и дизлайков -->
+    <script>
+      document.addEventListener('DOMContentLoaded', () => {
+        const voteGroups = document.querySelectorAll('.vote-group');
+
+        voteGroups.forEach(group => {
+          const btnLike = group.querySelector('.btn-like');
+          const btnDislike = group.querySelector('.btn-dislike');
+          const countLike = btnLike.querySelector('.vote-count');
+          const countDislike = btnDislike.querySelector('.vote-count');
+
+          // Логика нажатия на Лайк
+          btnLike.addEventListener('click', () => {
+            if (btnLike.classList.contains('active')) {
+              // Если лайк уже стоит -> убираем его
+              btnLike.classList.remove('active');
+              countLike.textContent = parseInt(countLike.textContent) - 1;
+            } else {
+              // Если лайка нет -> ставим
+              btnLike.classList.add('active');
+              countLike.textContent = parseInt(countLike.textContent) + 1;
+
+              // Если при этом стоял дизлайк -> убираем его
+              if (btnDislike.classList.contains('active')) {
+                btnDislike.classList.remove('active');
+                countDislike.textContent = parseInt(countDislike.textContent) - 1;
+              }
+            }
+          });
+
+          // Логика нажатия на Дизлайк
+          btnDislike.addEventListener('click', () => {
+            if (btnDislike.classList.contains('active')) {
+              // Если дизлайк уже стоит -> убираем его
+              btnDislike.classList.remove('active');
+              countDislike.textContent = parseInt(countDislike.textContent) - 1;
+            } else {
+              // Если дизлайка нет -> ставим
+              btnDislike.classList.add('active');
+              countDislike.textContent = parseInt(countDislike.textContent) + 1;
+
+              // Если при этом стоял лайк -> убираем его
+              if (btnLike.classList.contains('active')) {
+                btnLike.classList.remove('active');
+                countLike.textContent = parseInt(countLike.textContent) - 1;
+              }
+            }
+          });
+        });
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,262 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Ask Apple</title>
+    <link rel="icon" type="image/png" href="static/img/Logo.png" />
+    <link href="static/css/bootstrap.css" rel="stylesheet" />
+  </head>
+
+  <body class="d-flex flex-column min-vh-100">
+    <!-- Навигация -->
+    <header>
+      <nav class="navbar navbar-expand-lg bg-dark" data-bs-theme="dark">
+        <div class="container">
+          <div class="d-flex align-items-center justify-content-between">
+            <a href="index.html" class="text-decoration-none">
+              <img
+                src="static/img/Logo.png"
+                alt="Logo"
+                class="rounded-circle"
+                width="50"
+                height="50"
+              />
+            </a>
+            <a class="navbar-brand" href="index.html">AskApple</a>
+          </div>
+
+          <button
+            class="navbar-toggler"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent"
+            aria-expanded="false"
+            aria-label="Toggle navigation"
+          >
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div
+            class="collapse navbar-collapse flex-lg-row justify-content-lg-between ms-lg-4 mt-3 mt-lg-0"
+            id="navbarSupportedContent"
+          >
+            <form
+              class="d-flex flex-column flex-lg-row gap-2 justify-content-center"
+              role="search"
+            >
+              <input
+                class="form-control"
+                type="search"
+                placeholder="Найти вопрос"
+              />
+              <div class="d-flex gap-2 justify-content-lg-start">
+                <button class="btn btn-success flex-shrink-0" type="submit">
+                  Поиск
+                </button>
+                <a
+                  class="btn btn-primary flex-shrink-0"
+                  href="ask.html"
+                  role="button"
+                  >+Ask!</a
+                >
+              </div>
+            </form>
+            <div
+              class="ms-2 ms-lg-3 me-3 d-flex gap-3 mt-3 mt-lg-0 align-items-baseline"
+            >
+              <a href="login.html" class="link-light text-decoration-none"
+                >Войти</a
+              >
+              <a class="btn btn-light" href="signup.html" role="button"
+                >Регистрация</a
+              >
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container flex-grow-1 mt-3">
+      <div class="row p-0">
+        <section class="col-12 col-lg-9 order-2 order-lg-1">
+          <h1 class="mb-5">Новый вопрос</h1>
+          <!-- Вопрос -->
+
+          <form>
+            <div class="row mb-3">
+              <label for="name" class="col-sm-2 col-form-label">Название</label>
+              <div class="col-sm-10">
+                <input
+                  type="text"
+                  class="form-control"
+                  id="name"
+                  maxlength="500"
+                  placeholder="Введите название (максимум 500 символов)"
+                />
+              </div>
+            </div>
+
+            <div class="row mb-3">
+              <label
+                for="exampleFormControlTextarea1"
+                class="col-sm-2 col-form-label"
+                >Описание</label
+              >
+              <div class="col-sm-10">
+                <textarea
+                  class="form-control"
+                  type="text"
+                  id="exampleFormControlTextarea1"
+                  rows="5"
+                  maxlength="15000"
+                  placeholder="Опишите вопрос"
+                ></textarea>
+              </div>
+            </div>
+
+            <div class="row mb-5">
+              <label for="tags" class="col-sm-2 col-form-label">Тэги</label>
+              <div class="col-sm-10">
+                <input
+                  type="email"
+                  class="form-control"
+                  id="tags"
+                  placeholder="Добавьте теги"
+                />
+              </div>
+            </div>
+          </form>
+
+          <div class="mb-3">
+            <a
+              href="#"
+              class="text-decoration-none d-flex align-items-baseline text-danger"
+            >
+              <i class="bi bi-hand-thumbs-down"></i>
+              <a
+                class="btn btn-primary flex-shrink-0"
+                href="ask.html"
+                role="button"
+                >+Ask!</a
+              >
+            </a>
+          </div>
+        </section>
+
+        <!-- Боковая колонка -->
+        <aside class="col-12 col-lg-3 order-1 order-lg-2 mb-4 mb-lg-0">
+          <!-- Блок: Популярные теги -->
+          <div class="card mb-3">
+            <div class="card-header bg-white fw-bold">Популярные теги</div>
+            <div class="card-body">
+              <div class="d-flex flex-wrap gap-2">
+                <a href="#" class="badge text-bg-primary text-decoration-none"
+                  >python</a
+                >
+                <a href="#" class="badge text-bg-secondary text-decoration-none"
+                  >javascript</a
+                >
+                <a href="#" class="badge text-bg-success text-decoration-none"
+                  >html</a
+                >
+                <a href="#" class="badge text-bg-danger text-decoration-none"
+                  >css</a
+                >
+                <a
+                  href="#"
+                  class="badge text-bg-warning text-dark text-decoration-none"
+                  >bootstrap</a
+                >
+                <a
+                  href="#"
+                  class="badge text-bg-info text-dark text-decoration-none"
+                  >django</a
+                >
+                <a
+                  href="#"
+                  class="badge text-bg-light text-dark border text-decoration-none"
+                  >react</a
+                >
+                <a href="#" class="badge text-bg-dark text-decoration-none"
+                  >sql</a
+                >
+              </div>
+            </div>
+          </div>
+
+          <!-- Блок: Лучшие участники -->
+          <div class="card mb-3">
+            <div class="card-header bg-white fw-bold">Лучшие участники</div>
+            <div class="card-body p-0">
+              <ul class="list-group list-group-flush">
+                <li class="list-group-item d-flex align-items-center gap-3">
+                  <img
+                    src="static/img/profile_image_dummy.png"
+                    alt="User"
+                    class="rounded-circle"
+                    width="40"
+                    height="40"
+                    style="object-fit: cover"
+                  />
+                  <div class="flex-grow-1">
+                    <a href="#" class="text-decoration-none fw-bold text-dark"
+                      >User1</a
+                    >
+                    <div class="small text-muted">1,234 репутации</div>
+                  </div>
+                </li>
+
+                <li class="list-group-item d-flex align-items-center gap-3">
+                  <img
+                    src="static/img/profile_image_dummy.png"
+                    alt="User"
+                    class="rounded-circle"
+                    width="40"
+                    height="40"
+                    style="object-fit: cover"
+                  />
+                  <div class="flex-grow-1">
+                    <a href="#" class="text-decoration-none fw-bold text-dark"
+                      >User2</a
+                    >
+                    <div class="small text-muted">987 репутации</div>
+                  </div>
+                </li>
+
+                <li class="list-group-item d-flex align-items-center gap-3">
+                  <img
+                    src="static/img/profile_image_dummy.png"
+                    alt="User"
+                    class="rounded-circle"
+                    width="40"
+                    height="40"
+                    style="object-fit: cover"
+                  />
+                  <div class="flex-grow-1">
+                    <a href="#" class="text-decoration-none fw-bold text-dark"
+                      >User3</a
+                    >
+                    <div class="small text-muted">756 репутации</div>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="card-footer bg-white text-center">
+              <a href="#" class="text-decoration-none">Все участники →</a>
+            </div>
+          </div>
+        </aside>
+      </div>
+    </main>
+
+    <!-- Футер -->
+    <footer class="bg-dark text-white text-center py-3 mt-auto">
+      <div class="container">
+        <p class="mb-0">© 2026 Knowledge Base</p>
+      </div>
+    </footer>
+
+    <script src="static/js/bootstrap.bundle.js"></script>
+  </body>
+</html>

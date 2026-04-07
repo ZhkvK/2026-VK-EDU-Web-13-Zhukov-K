@@ -1,0 +1,270 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Ask Apple</title>
+    <link rel="icon" type="image/png" href="static/img/Logo.png" />
+    <link href="static/css/bootstrap.css" rel="stylesheet" />
+  </head>
+
+  <body class="d-flex flex-column min-vh-100">
+    <!-- Навигация -->
+    <header>
+      <nav class="navbar navbar-expand-lg bg-dark" data-bs-theme="dark">
+        <div class="container">
+          <div class="d-flex align-items-center justify-content-between">
+            <a href="index.html" class="text-decoration-none">
+              <img
+                src="static/img/Logo.png"
+                alt="Logo"
+                class="rounded-circle"
+                width="50"
+                height="50"
+              />
+            </a>
+            <a class="navbar-brand" href="index.html">AskApple</a>
+          </div>
+
+          <button
+            class="navbar-toggler"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent"
+            aria-expanded="false"
+            aria-label="Toggle navigation"
+          >
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div
+            class="collapse navbar-collapse flex-lg-row justify-content-lg-between ms-lg-4 mt-3 mt-lg-0"
+            id="navbarSupportedContent"
+          >
+            <form
+              class="d-flex flex-column flex-lg-row gap-2 justify-content-center"
+              role="search"
+            >
+              <input
+                class="form-control"
+                type="search"
+                placeholder="Найти вопрос"
+              />
+              <div class="d-flex gap-2 justify-content-lg-start">
+                <button class="btn btn-success flex-shrink-0" type="submit">
+                  Поиск
+                </button>
+                <a
+                  class="btn btn-primary flex-shrink-0"
+                  href="ask.html"
+                  role="button"
+                  >+Ask!</a
+                >
+              </div>
+            </form>
+            <div
+              class="ms-2 ms-lg-3 me-3 d-flex gap-3 mt-3 mt-lg-0 align-items-baseline"
+            >
+              <a href="login.html" class="link-light text-decoration-none"
+                >Войти</a
+              >
+              <a class="btn btn-light" href="signup.html" role="button"
+                >Регистрация</a
+              >
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container flex-grow-1 mt-3">
+      <div class="row p-0">
+        <section class="col-12 col-lg-9 order-2 order-lg-1">
+          <h1 class="mb-5">Настройки профиля</h1>
+
+          <form class="row g-3 needs-validation" novalidate>
+            <div class="col-md-6">
+              <label for="profileName" class="form-label">Имя</label>
+              <input
+                type="text"
+                class="form-control"
+                id="profileName"
+                maxlength="20"
+                required
+                value="Dr. Pepper"
+              />
+              <div class="invalid-feedback">
+                Имя должно содержать не более 20 символов и не быть пустым.
+              </div>
+            </div>
+
+            <div class="col-md-6">
+              <label for="profileEmail" class="form-label">E-mail</label>
+              <input
+                type="email"
+                class="form-control"
+                id="profileEmail"
+                required
+                value="dr.pepper@example.com"
+              />
+              <div class="invalid-feedback">
+                Пожалуйста, введите корректный адрес электронной почты.
+              </div>
+            </div>
+
+            <div class="col-12">
+              <label for="profileAvatar" class="form-label"
+                >Загрузить аватар</label
+              >
+              <input
+                type="file"
+                class="form-control"
+                id="profileAvatar"
+                accept="image/*"
+              />
+              <div class="invalid-feedback">
+                Пожалуйста, выберите корректный файл изображения.
+              </div>
+              <div class="form-text">
+                Максимальный размер файла: 16 МБ. Форматы: JPG, PNG, GIF.
+              </div>
+            </div>
+
+            <div class="col-12">
+              <label for="profileAbout" class="form-label">О себе</label>
+              <textarea
+                class="form-control"
+                id="profileAbout"
+                rows="4"
+                maxlength="500"
+                required
+              >Привет! Я увлекаюсь программированием и технологиями.</textarea>
+              <div class="invalid-feedback">
+                Текст не должен превышать 500 символов и не может быть пустым.
+              </div>
+              <div class="form-text">Максимум 500 символов.</div>
+            </div>
+
+            <div class="col-12 mb-4">
+              <button class="btn btn-primary" type="submit">Сохранить</button>
+            </div>
+          </form>
+        </section>
+
+        <!-- Боковая колонка -->
+        <aside class="col-12 col-lg-3 order-1 order-lg-2 mb-4 mb-lg-0">
+          <!-- Блок: Популярные теги -->
+          <div class="card mb-3">
+            <div class="card-header bg-white fw-bold">Популярные теги</div>
+            <div class="card-body">
+              <div class="d-flex flex-wrap gap-2">
+                <a href="#" class="badge text-bg-primary text-decoration-none"
+                  >python</a
+                >
+                <a href="#" class="badge text-bg-secondary text-decoration-none"
+                  >javascript</a
+                >
+                <a href="#" class="badge text-bg-success text-decoration-none"
+                  >html</a
+                >
+                <a href="#" class="badge text-bg-danger text-decoration-none"
+                  >css</a
+                >
+                <a
+                  href="#"
+                  class="badge text-bg-warning text-dark text-decoration-none"
+                  >bootstrap</a
+                >
+                <a
+                  href="#"
+                  class="badge text-bg-info text-dark text-decoration-none"
+                  >django</a
+                >
+                <a
+                  href="#"
+                  class="badge text-bg-light text-dark border text-decoration-none"
+                  >react</a
+                >
+                <a href="#" class="badge text-bg-dark text-decoration-none"
+                  >sql</a
+                >
+              </div>
+            </div>
+          </div>
+
+          <!-- Блок: Лучшие участники -->
+          <div class="card mb-3">
+            <div class="card-header bg-white fw-bold">Лучшие участники</div>
+            <div class="card-body p-0">
+              <ul class="list-group list-group-flush">
+                <li class="list-group-item d-flex align-items-center gap-3">
+                  <img
+                    src="static/img/profile_image_dummy.png"
+                    alt="User"
+                    class="rounded-circle"
+                    width="40"
+                    height="40"
+                    style="object-fit: cover"
+                  />
+                  <div class="flex-grow-1">
+                    <a href="#" class="text-decoration-none fw-bold text-dark"
+                      >User1</a
+                    >
+                    <div class="small text-muted">1,234 репутации</div>
+                  </div>
+                </li>
+
+                <li class="list-group-item d-flex align-items-center gap-3">
+                  <img
+                    src="static/img/profile_image_dummy.png"
+                    alt="User"
+                    class="rounded-circle"
+                    width="40"
+                    height="40"
+                    style="object-fit: cover"
+                  />
+                  <div class="flex-grow-1">
+                    <a href="#" class="text-decoration-none fw-bold text-dark"
+                      >User2</a
+                    >
+                    <div class="small text-muted">987 репутации</div>
+                  </div>
+                </li>
+
+                <li class="list-group-item d-flex align-items-center gap-3">
+                  <img
+                    src="static/img/profile_image_dummy.png"
+                    alt="User"
+                    class="rounded-circle"
+                    width="40"
+                    height="40"
+                    style="object-fit: cover"
+                  />
+                  <div class="flex-grow-1">
+                    <a href="#" class="text-decoration-none fw-bold text-dark"
+                      >User3</a
+                    >
+                    <div class="small text-muted">756 репутации</div>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="card-footer bg-white text-center">
+              <a href="#" class="text-decoration-none">Все участники →</a>
+            </div>
+          </div>
+        </aside>
+      </div>
+    </main>
+
+    <!-- Футер -->
+    <footer class="bg-dark text-white text-center py-3 mt-auto">
+      <div class="container">
+        <p class="mb-0">© 2026 Knowledge Base</p>
+      </div>
+    </footer>
+
+    <script src="static/js/bootstrap.bundle.js"></script>
+    <script src="static/js/main.js"></script>
+  </body>
+</html>
