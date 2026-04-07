@@ -1,0 +1,60 @@
+{% extends 'questions/layout/base.html' %} {% load static %} {% block title %}
+<h1 class="mb-5">Новый вопрос</h1>
+{% endblock %} {% block content %}
+<!-- Вопрос -->
+<section class="col-12 col-lg-9 order-2 order-lg-1">
+  <form>
+    <div class="row mb-3">
+      <label for="name" class="col-sm-2 col-form-label">Название</label>
+      <div class="col-sm-10">
+        <input
+          type="text"
+          class="form-control"
+          id="name"
+          maxlength="500"
+          placeholder="Введите название (максимум 500 символов)"
+        />
+      </div>
+    </div>
+
+    <div class="row mb-3">
+      <label for="exampleFormControlTextarea1" class="col-sm-2 col-form-label"
+        >Описание</label
+      >
+      <div class="col-sm-10">
+        <textarea
+          class="form-control"
+          type="text"
+          id="exampleFormControlTextarea1"
+          rows="5"
+          maxlength="15000"
+          placeholder="Опишите вопрос"
+        ></textarea>
+      </div>
+    </div>
+
+    <div class="row mb-5">
+      <label for="tags" class="col-sm-2 col-form-label">Тэги</label>
+      <div class="col-sm-10">
+        <input
+          type="email"
+          class="form-control"
+          id="tags"
+          placeholder="Добавьте теги"
+        />
+      </div>
+    </div>
+  </form>
+
+  <div class="mb-3">
+    <a
+      href="#"
+      class="text-decoration-none d-flex align-items-baseline text-danger"
+    >
+      <a class="btn btn-primary flex-shrink-0" href="#" role="button"
+        >+Ask!</a
+      >
+    </a>
+  </div>
+</section>
+{% endblock %}
