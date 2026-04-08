@@ -16,7 +16,7 @@
 | Создание вопроса | `questions/ask.html` | `/ask/` |
 | Вход | `core/login.html` | `/auth/login/` |
 | Регистрация | `core/signup.html` | `/auth/signup/` |
-| Профиль | `core/profile.html` | `/auth/profile/<int:user_id>/` |
+| Профиль | `core/profile.html` | `/auth/profile/` |
 | Поиск по тегу | `questions/tag.html` | `/tag/<str:tag>/` |
 
 ---
