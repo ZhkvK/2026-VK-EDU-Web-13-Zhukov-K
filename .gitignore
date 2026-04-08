@@ -69,9 +69,3 @@ dist/
 build/
 *.tmp
 *.temp
-.coverage
-htmlcov/
-.tox/
-.nox/
-.hypothesis/
-.pytest_cache/
