@@ -1,0 +1,50 @@
+{% load static %}
+
+<!-- Боковая колонка -->
+<aside class="col-12 col-lg-3 order-1 order-lg-2 mb-4 mb-lg-0">
+  <!-- Блок: Популярные теги -->
+  <div class="card mb-3">
+    <div class="card-header bg-white fw-bold">Популярные теги</div>
+    <div class="card-body">
+      <div class="d-flex flex-wrap gap-2">
+        {% for tag in popular_tags %}
+        <a href="{% url "questions:tag" tag %}" class="badge text-bg-primary text-decoration-none"
+          >{{tag}}</a
+        >
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+
+  <!-- Блок: Лучшие участники -->
+  <div class="card mb-3">
+    <div class="card-header bg-white fw-bold">Лучшие участники</div>
+    <div class="card-body p-0">
+      <ul class="list-group list-group-flush">
+        {% for top_user in top_users %}
+        <li class="list-group-item d-flex align-items-center gap-3">
+          <img
+            src="{% static 'core/img/profile_image_dummy.png' %}"
+            alt="User"
+            class="rounded-circle"
+            width="40"
+            height="40"
+            style="object-fit: cover"
+          />
+          <div class="flex-grow-1">
+            <a href="#" class="text-decoration-none fw-bold text-dark"
+              >{{top_user.username}}</a
+            >
+            <div class="small text-muted">
+              {{top_user.reputation}} репутации
+            </div>
+          </div>
+        </li>
+        {% endfor %}
+      </ul>
+    </div>
+    <div class="card-footer bg-white text-center">
+      <a href="#" class="text-decoration-none">Все участники →</a>
+    </div>
+  </div>
+</aside>

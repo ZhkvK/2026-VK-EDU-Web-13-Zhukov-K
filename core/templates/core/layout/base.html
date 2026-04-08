@@ -76,74 +76,13 @@
                 >
               </div>
             </form>
-            <div
-              class="ms-2 ms-lg-3 me-3 d-flex gap-3 mt-3 mt-lg-0 align-items-baseline"
-            >
-              <a href="{% url 'core:login' %}" class="link-light text-decoration-none"
-                >Войти</a
-              >
-              <a class="btn btn-light" href="{% url 'core:signup' %}" role="button"
-                >Регистрация</a
-              >
-            </div>
+            {% include "core/partials/nav_auth_status.html" %}
           </div>
         </div>
       </nav>
     </header>
 
-    <main class="container flex-grow-1 mt-3">
-      {% block title %} {% endblock %}
-      <div class="row p-0">
-        <!-- Карточки -->
-        {% block content %} {% endblock %}
-        <!-- Боковая колонка -->
-        <aside class="col-12 col-lg-3 order-1 order-lg-2 mb-4 mb-lg-0">
-          <!-- Блок: Популярные теги -->
-          <div class="card mb-3">
-            <div class="card-header bg-white fw-bold">Популярные теги</div>
-            <div class="card-body">
-              <div class="d-flex flex-wrap gap-2">
-                {% for tag in popular_tags %}
-                <a href="{% url "questions:tag" tag %}" class="badge text-bg-primary text-decoration-none"
-                  >{{tag}}</a
-                >
-                {% endfor %}
-              </div>
-            </div>
-          </div>
-
-          <!-- Блок: Лучшие участники -->
-          <div class="card mb-3">
-            <div class="card-header bg-white fw-bold">Лучшие участники</div>
-            <div class="card-body p-0">
-              <ul class="list-group list-group-flush">
-                {% for top_user in top_users %}
-                <li class="list-group-item d-flex align-items-center gap-3">
-                  <img
-                    src="{% static 'questions/img/profile_image_dummy.png' %}"
-                    alt="User"
-                    class="rounded-circle"
-                    width="40"
-                    height="40"
-                    style="object-fit: cover"
-                  />
-                  <div class="flex-grow-1">
-                    <a href="#" class="text-decoration-none fw-bold text-dark"
-                      >{{top_user.username}}</a
-                    >
-                    <div class="small text-muted">{{top_user.reputation}} репутации</div>
-                  </div>
-                </li>
-                {% endfor %}
-              </ul>
-            </div>
-            <div class="card-footer bg-white text-center">
-              <a href="#" class="text-decoration-none">Все участники →</a>
-            </div>
-          </div>
-        </aside>
-      </div>
-    </main>
+    {% block content %} {% endblock %}
 
     <!-- Футер -->
     <footer class="bg-dark text-white text-center py-3 mt-auto">
