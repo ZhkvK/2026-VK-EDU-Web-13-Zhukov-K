@@ -41,7 +41,17 @@ source venv/bin/activate
 pip install -r requirements.txt
 ```
 
-### 3. Запуск сервера
+### 3. Настройка переменных окружения
+Проект использует переменные окружения. Создайте файл `.env` на основе примера:
+```bash
+# Для Linux/macOS
+cp .env.example .env
+
+# Для Windows (в PowerShell)
+Copy-Item .env.example -Destination .env
+```
+
+### 4. Запуск сервера
 
 ```bash
 python manage.py runserver
@@ -97,5 +107,6 @@ docker compose up --build
 ```
 asgiref==3.11.1
 Django==6.0.3
+python-decouple==3.8
 sqlparse==0.5.5
 ```
