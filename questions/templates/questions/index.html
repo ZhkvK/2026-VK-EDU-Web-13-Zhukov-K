@@ -1,20 +1,22 @@
-{% extends 'questions/layout/base.html' %} {% load static %} 
-
-{% block title %}
-<div class="d-flex align-items-baseline gap-2 mb-3">
-  <h1>Новые вопросы</h1>
-  <a href="{% url 'questions:hot' %}" class="ms-2">Популярное</a>
-</div>
-{% endblock %} 
+{% extends 'layout/base.html' %} {% load static %} 
 
 {% block content %}
-<!-- Карточки -->
-<section class="col-12 col-lg-9 order-2 order-lg-1">
-  {% for question in questions %}
-  {% include 'questions/partials/question_card.html' %}
-  {% endfor %}
-  {% if page_obj.has_previous or page_obj.has_next   %}
-    {% include 'questions/partials/pagination.html' %}
-  {% endif %}
-</section>
+<main class="container flex-grow-1 mt-3">
+  <div class="d-flex align-items-baseline gap-2 mb-3">
+    <h1>Новые вопросы</h1>
+    <a href="{% url 'questions:hot' %}" class="ms-2">Популярное</a>
+  </div>
+  <div class="row p-0">
+    <!-- Карточки -->
+    <section class="col-12 col-lg-9 order-2 order-lg-1">
+      {% for question in questions %}
+      {% include 'questions/partials/question_card.html' %}
+      {% endfor %}
+      {% if page_obj.has_previous or page_obj.has_next   %}
+        {% include 'questions/partials/pagination.html' %}
+      {% endif %}
+    </section>
+      {% include "partials/aside_col.html" %}
+  </div>
+</main>
 {% endblock %}

@@ -1,4 +1,4 @@
-{% extends 'core/layout/base.html' %} {% load static %} {% block content %}
+{% extends 'layout/base.html' %} {% load static %} {% block content %}
 <main class="container flex-grow-1 mt-3">
   <div class="row p-0">
     <section class="col-12 col-lg-9 order-2 order-lg-1">
@@ -71,7 +71,7 @@
         </div>
       </form>
     </section>
-    {% include "core/partials/aside_col.html" %}
+    {% include "partials/aside_col.html" %}
   </div>
 </main>
 {% endblock content %}
