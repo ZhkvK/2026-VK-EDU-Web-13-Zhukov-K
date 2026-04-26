@@ -1,0 +1,99 @@
+{% extends 'layout/base.html' %} {% load static %} 
+{% block content %}
+<main class="container flex-grow-1 mt-3">
+  <div class="row p-0">
+    <section class="col-12 col-lg-9 order-2 order-lg-1">
+      <!-- Вопрос -->
+      <div class="card border-0 mb-5">
+        <div class="card-body p-4 p-md-5">
+          <h1 class="card-title h2 mb-4">{{question.title}}</h1>
+
+          <div class="d-flex align-items-center gap-3 mb-4">
+            <img
+              src="{% static 'questions/img/profile_image_dummy.png' %}"
+              class="rounded-circle"
+              width="40"
+              height="40"
+              style="object-fit: cover"
+            />
+            <div>
+              <a href="#" class="text-decoration-none fw-bold text-dark"
+                >{{question.author.username}}</a
+              >
+              <div class="small text-muted">{{question.created_at}}</div>
+            </div>
+          </div>
+
+          <div class="card-text fs-5 mb-4">
+            <p>
+              {{question.text}}
+            </p>
+          </div>
+
+          <div class="d-flex justify-content-between">
+            <div class="d-flex flex-wrap gap-2 mb-4">
+              {% for tag in question.tags %}
+              <a
+                href="#"
+                class="badge text-bg-primary text-decoration-none px-3 py-2"
+                >{{tag}}</a
+              >
+              {% endfor %}
+            </div>
+            Ответов: {{question.answers_count}}
+          </div>
+
+          <div
+            class="d-flex justify-content-between align-items-center pt-3 border-top"
+          >
+            <div class="d-flex align-items-center gap-2 vote-group">
+              <button
+                type="button"
+                class="btn btn-outline-success btn-sm btn-like d-flex align-items-center gap-1"
+              >
+                <i class="bi bi-hand-thumbs-up"></i>
+                <span class="vote-count">{{question.votes.0}}</span>
+              </button>
+              <button
+                type="button"
+                class="btn btn-outline-danger btn-sm btn-dislike d-flex align-items-center gap-1"
+              >
+                <i class="bi bi-hand-thumbs-down"></i>
+                <span class="vote-count">{{question.votes.1}}</span>
+              </button>
+            </div>
+            <div class="d-flex gap-2">
+              <button class="btn btn-outline-primary">Редактировать</button>
+              <button class="btn btn-outline-danger">Удалить</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Ответ 1 -->
+      {% for answer in answers%}
+      {% include "questions/partials/answer_card.html" %}
+      {% endfor %}
+
+      <!-- Форма добавления ответа -->
+      <div class="mt-5 mb-3">
+        <textarea
+          class="form-control"
+          type="text"
+          id="exampleFormControlTextarea1"
+          rows="5"
+          maxlength="15000"
+          placeholder="Добавьте ответ"
+        ></textarea>
+      </div>
+      <div class="mb-5">
+        <button type="button" class="btn btn-success">Отправить</button>
+      </div>
+      {% if page_obj.has_previous or page_obj.has_next   %}
+        {% include 'questions/partials/pagination.html' %}
+      {% endif %}
+    </section>
+    {% include "partials/aside_col.html" %}
+  </div>
+</main>
+{% endblock %}

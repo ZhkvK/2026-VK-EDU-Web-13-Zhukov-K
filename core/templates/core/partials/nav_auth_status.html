@@ -1,0 +1,27 @@
+{% load static %}
+
+{% if user.is_Authorized %}
+<div class="ms-2 ms-lg-3 me-3 d-flex gap-3 mt-3 mt-lg-0 align-items-center">
+    <a href="#" class="d-flex align-items-center link-light text-decoration-none gap-2">
+      <img 
+        src="{% static 'questions/img/profile_image_dummy.png' %}" 
+        alt="Аватар" 
+        width="35" 
+        height="35" 
+        class="rounded-circle object-fit-cover"
+      >
+      <span>{{ user.username|default:"Профиль" }}</span>
+    </a>
+    <a class="btn btn-outline-light btn-sm" href="{% url "questions:index" %}" role="button">Выход</a>
+  </div>
+{% else %}
+<div class="ms-2 ms-lg-3 me-3 d-flex gap-3 mt-3 mt-lg-0 align-items-baseline">
+  <a href="{% url 'core:login' %}" class="link-light text-decoration-none"
+    >Войти</a
+  >
+  <a class="btn btn-light" href="{% url 'core:signup' %}" role="button"
+    >Регистрация</a
+  >
+</div>
+{% endif %}
+

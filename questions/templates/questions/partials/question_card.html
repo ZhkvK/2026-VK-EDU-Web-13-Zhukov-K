@@ -1,0 +1,66 @@
+{% load static %} 
+
+<div class="card mb-3">
+  <div class="row g-0">
+    <div class="col-md-2">
+      <div
+        class="d-flex flex-row flex-md-column align-items-center justify-content-md-center h-100 p-3 gap-3 gap-md-2 bg-light"
+      >
+        <a href="#" class="text-decoration-none">
+          <img
+            src="{% static 'questions/img/profile_image_dummy.png' %}"
+            class="rounded-circle"
+            alt="{{ question.author.username }}"
+            style="width: 60px; height: 60px; object-fit: cover"
+          />
+        </a>
+        <a href="{% url 'questions:question' question.id %}" class="text-decoration-none text-center"
+          >Ответы ({{ question.answers }})</a
+        >
+      </div>
+    </div>
+    <div class="col-md-10">
+      <div class="card-body">
+        <h5 class="card-title">
+          <a href="{% url 'questions:question' question.id %}" class="text-decoration-none"
+            >{{ question.title }}</a
+          >
+        </h5>
+        <p class="card-text">{{ question.text }}</p>
+        <div class="d-flex justify-content-between align-items-baseline">
+          <p class="card-text mb-0">
+            <small class="text-body-secondary"
+              >Обновлен {{ question.update }} назад</small
+            >
+          </p>
+
+          <div class="d-flex align-items-center gap-2 vote-group">
+            <button
+              type="button"
+              class="btn btn-outline-success btn-sm btn-like d-flex align-items-center gap-1"
+            >
+              <i class="bi bi-hand-thumbs-up"></i>
+              <span class="vote-count">{{ question.votes.0 }}</span>
+            </button>
+            <button
+              type="button"
+              class="btn btn-outline-danger btn-sm btn-dislike d-flex align-items-center gap-1"
+            >
+              <i class="bi bi-hand-thumbs-down"></i>
+              <span class="vote-count">{{ question.votes.1 }}</span>
+            </button>
+          </div>
+        </div>
+        <div class="d-flex mt-2 gap-1">
+          {% for tag in question.tags %}
+          <a
+            href="{% url "questions:tag" tag %}"
+            class="rounded-pill badge text-bg-primary text-decoration-none"
+            >{{tag}}</a
+          >
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
