@@ -1,4 +1,4 @@
-FROM python:3.11-slim
+FROM python:3.14-slim
 
 WORKDIR /app
 
@@ -8,8 +8,5 @@ RUN pip install -r requirements.txt -i https://mirrors.cloud.tencent.com/pypi/si
 
 # Копирование проекта
 COPY . .
-
-# Создание папки для медиа (если нет)
-RUN mkdir -p /app/media
 
 EXPOSE 8000
