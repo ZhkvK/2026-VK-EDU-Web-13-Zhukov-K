@@ -15,7 +15,7 @@
           />
         </a>
         <a href="{% url 'questions:question' question.id %}" class="text-decoration-none text-center"
-          >Ответы ({{ question.answers }})</a
+          >Ответы ({{ question.answers.count }})</a
         >
       </div>
     </div>
@@ -26,37 +26,32 @@
             >{{ question.title }}</a
           >
         </h5>
-        <p class="card-text">{{ question.text }}</p>
+        <p class="card-text">{{ question.content }}</p>
         <div class="d-flex justify-content-between align-items-baseline">
           <p class="card-text mb-0">
             <small class="text-body-secondary"
-              >Обновлен {{ question.update }} назад</small
+              >Создан {{ question.created_at }} </small
             >
           </p>
 
           <div class="d-flex align-items-center gap-2 vote-group">
-            <button
-              type="button"
-              class="btn btn-outline-success btn-sm btn-like d-flex align-items-center gap-1"
-            >
-              <i class="bi bi-hand-thumbs-up"></i>
-              <span class="vote-count">{{ question.votes.0 }}</span>
+            <button type="button" class="btn btn-outline-success btn-sm btn-like border-0">
+                <i class="bi bi-chevron-up fw-bold"></i>
             </button>
-            <button
-              type="button"
-              class="btn btn-outline-danger btn-sm btn-dislike d-flex align-items-center gap-1"
-            >
-              <i class="bi bi-hand-thumbs-down"></i>
-              <span class="vote-count">{{ question.votes.1 }}</span>
+            
+            <span class="vote-count fw-bold">{{ question.rating }}</span>
+            
+            <button type="button" class="btn btn-outline-danger btn-sm btn-dislike border-0">
+                <i class="bi bi-chevron-down fw-bold"></i>
             </button>
           </div>
         </div>
         <div class="d-flex mt-2 gap-1">
-          {% for tag in question.tags %}
+          {% for tag in question.tags.all %}
           <a
             href="{% url "questions:tag" tag %}"
             class="rounded-pill badge text-bg-primary text-decoration-none"
-            >{{tag}}</a
+            >{{tag.name}}</a
           >
           {% endfor %}
         </div>

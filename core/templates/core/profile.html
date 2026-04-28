@@ -13,7 +13,7 @@
             id="profileName"
             maxlength="20"
             required
-            value={{ user.username }}
+            value={{ profile.user.username }}
           />
           <div class="invalid-feedback">
             Имя должно содержать не более 20 символов и не быть пустым.
@@ -27,7 +27,7 @@
             class="form-control"
             id="profileEmail"
             required
-            value={{ user.email }}
+            value={{ profile.user.email }}
           />
           <div class="invalid-feedback">
             Пожалуйста, введите корректный адрес электронной почты.
@@ -58,7 +58,7 @@
             rows="4"
             maxlength="500"
             required
-          >{{ user.about }}
+          >{{ profile.bio }}
           </textarea>
           <div class="invalid-feedback">
             Текст не должен превышать 500 символов и не может быть пустым.

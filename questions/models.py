@@ -1,12 +1,8 @@
 from django.db import models
 from django.contrib.auth.models import User
 
-class QuestionManager(models.Manager):
-    def get_new(self):
-        return self.order_by('-created_at')
+from questions.managers import QuestionManager, AnswerManager
 
-    def get_best(self):
-        return self.order_by('-rating')
 
 # Create your models here.
 
@@ -49,13 +45,28 @@ class Answer(models.Model):
     created_at = models.DateTimeField(verbose_name="Создан", auto_now_add=True)
     rating = models.IntegerField(verbose_name="Рейтинг", default=0)
     is_active = models.BooleanField(verbose_name="Активно?", default=True)
+    is_correct = models.BooleanField(verbose_name="Правильный ответ", default=False)
+
+    objects = AnswerManager()
 
     class Meta:
+        constraints = [
+            models.UniqueConstraint(
+                fields=['question'], 
+                condition=models.Q(is_correct=True),
+                name='Должен быть только 1 правильный ответ для 1 вопроса'
+            )
+        ]
         verbose_name = ("Ответ")
         verbose_name_plural = ("Ответы")
     
     def __str__(self):
         return f"Ответ на вопрос \"{self.question}\""
+    
+    def save(self, *args, **kwargs):
+        if self.is_correct:
+            Answer.objects.filter(question=self.question, is_correct=True).update(is_correct=False)
+        super().save(*args, **kwargs)
 
 
 class Comment(models.Model):

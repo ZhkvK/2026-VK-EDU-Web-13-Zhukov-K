@@ -10,33 +10,14 @@
   />
   <div class="flex-grow-1">
     <div class="d-flex justify-content-between align-items-baseline">
-      <a href="#" class="text-decoration-none fw-bold text-dark small">{{ comment.author.username }}</a>
+      <a href="#" class="text-decoration-none fw-bold text-dark small"
+        >{{ comment.author.username }}</a
+      >
       <small class="text-muted me-3" style="font-size: 0.75rem"
         >{{ comment.created_at }}</small
       >
     </div>
-    <p class="mb-1 small">{{ comment.text }}</p>
+    <p class="mb-1 small">{{ comment.content }}</p>
 
-    <div class="d-flex align-items-center gap-3">
-      <div class="d-flex align-items-center gap-2 vote-group">
-        <button
-          type="button"
-          class="btn btn-outline-success btn-sm btn-like d-flex align-items-center gap-1 py-0 px-2"
-          style="font-size: 0.8rem"
-        >
-          <i class="bi bi-hand-thumbs-up"></i>
-          <span class="vote-count">{{ comment.votes.0 }}</span>
-        </button>
-        <button
-          type="button"
-          class="btn btn-outline-danger btn-sm btn-dislike d-flex align-items-center gap-1 py-0 px-2"
-          style="font-size: 0.8rem"
-        >
-          <i class="bi bi-hand-thumbs-down"></i>
-          <span class="vote-count">{{comment.votes.1}}</span>
-        </button>
-      </div>
-      <a href="#" class="text-decoration-none text-muted small">Ответить</a>
-    </div>
   </div>
 </div>

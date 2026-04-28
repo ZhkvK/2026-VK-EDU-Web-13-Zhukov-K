@@ -1,4 +1,7 @@
 from django.shortcuts import render
+from django.views.generic import TemplateView
+from django.contrib.auth.mixins import LoginRequiredMixin
+from core.models import Profile
 
 POPULAR_TAGS = ['python', 'javascript', 'html', 'css', 'bootstrap', 'django', 'react', 'sql']
 
@@ -25,15 +28,23 @@ USER_UNAUTHORIZED = {
 }
 
 # Create your views here.
-def login(request):
-    return render(request, 'core/login.html', context={'user':USER_UNAUTHORIZED})
 
-def signup(request):
-    return render(request, 'core/signup.html', context={'user':USER_UNAUTHORIZED})
+class LoginView(TemplateView):
+    template_name = "core/login.html"
+    
+class SignupView(TemplateView):
+    template_name = "core/signup.html"
 
-def profile(request):
-    return render(request, 'core/profile.html', context={
-        'user':USER_AUTHORIZED,
-        'popular_tags': POPULAR_TAGS,
-        'top_users': TOP_USERS
+class ProfiveView(LoginRequiredMixin, TemplateView):
+    template_name = "core/profile.html"
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        user_id = self.kwargs.get('user_id') 
+        profile = Profile.objects.get_user(user_id)
+        context.update({
+            'profile': profile,
+            'popular_tags': POPULAR_TAGS,
+            'top_users': TOP_USERS,
         })
+        return context

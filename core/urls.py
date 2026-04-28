@@ -1,10 +1,10 @@
 from django.urls import path
-from core import views
+from core.views import LoginView, SignupView, ProfiveView 
 
 app_name = 'core'
 
 urlpatterns = [
-    path('login/', views.login, name='login'),
-    path('signup/', views.signup, name='signup'),
-    path('profile/', views.profile, name='profile'),
+    path('login/', LoginView.as_view(), name='login'),
+    path('signup/', SignupView.as_view(), name='signup'),
+    path('profile/<int:user_id>/', ProfiveView.as_view(), name='profile'),
 ]

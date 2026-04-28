@@ -9,13 +9,14 @@ class QuestionAdmin(admin.ModelAdmin):
     search_fields = ["title", "author__username", "tags__name"]
     autocomplete_fields = ["tags"]
     raw_id_fields = ["author"]
+    readonly_fields = ["rating", "answers_count"]
     list_select_related = ["author"] 
 
     class AnswerInline(admin.TabularInline):
         model = Answer
         raw_id_fields = ["author"]
-        fields = ["content", "author", "is_active", "rating"]
-        readonly_fields = ["author", "rating"]
+        fields = ["content", "author", "is_active", "rating", "is_correct"]
+        readonly_fields = ["rating"]
         extra = 0
     
     inlines = [AnswerInline]
@@ -28,12 +29,13 @@ class AnswerAdmin(admin.ModelAdmin):
     search_fields = ["content", "author__username"]
     raw_id_fields = ["author", "question"]
     list_select_related = ["author", "question"]
+    readonly_fields = ["rating"]
 
     class CommentInline(admin.TabularInline):
         model = Comment
         raw_id_fields = ["author"]
         fields = ["content", "author", "is_active"]
-        readonly_fields = ["author"]
+        # readonly_fields = ["author"]
         extra = 0
     
     inlines = [CommentInline]
