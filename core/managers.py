@@ -1,7 +1,8 @@
 from django.db import models
-from django.shortcuts import get_object_or_404
 
 class ProfileManager(models.Manager):
-    
     def get_user(self, user_id):
-        return get_object_or_404(self, user__id=user_id)
+        return self.select_related('user').filter(user__id=user_id).first()
+    
+    def get_most_active(self):
+        return self.select_related('user').order_by("-activity_count")[:5]

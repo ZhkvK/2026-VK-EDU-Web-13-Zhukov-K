@@ -4,7 +4,7 @@ from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.views.generic import TemplateView, RedirectView
 from django.urls import reverse
 
-from questions.models import Question, Tag, Answer, Comment
+from questions.models import Question, Answer
 
 
 # QUESTIONS = [
@@ -135,23 +135,23 @@ from questions.models import Question, Tag, Answer, Comment
 # ]
 
 # Заглушка для боковой панели (теги и пользователи)
-POPULAR_TAGS = ['python', 'javascript', 'html', 'css', 'bootstrap', 'django', 'react', 'sql']
+# POPULAR_TAGS = ['python', 'javascript', 'html', 'css', 'bootstrap', 'django', 'react', 'sql']
 
-TOP_USERS = [
-    {'username': 'User1', 'reputation': 1234},
-    {'username': 'User2', 'reputation': 987},
-    {'username': 'User3', 'reputation': 756},
-]
+# TOP_USERS = [
+#     {'username': 'User1', 'reputation': 1234},
+#     {'username': 'User2', 'reputation': 987},
+#     {'username': 'User3', 'reputation': 756},
+# ]
 
-USER_UNAUTHORIZED = {
-    'username': "Dr.Pepper",
-    'email': "dr.pepper@example.com",
-    'avatar_image': "questions/img/Logo.png",
-    'about': "Привет! Я увлекаюсь программированием и технологиями.",
-    'is_Authorized': False
-}
+# USER_UNAUTHORIZED = {
+#     'username': "Dr.Pepper",
+#     'email': "dr.pepper@example.com",
+#     'avatar_image': "questions/img/Logo.png",
+#     'about': "Привет! Я увлекаюсь программированием и технологиями.",
+#     'is_Authorized': False
+# }
 
-def paginate(objects_list, request, per_page=2):
+def paginate(objects_list, request, per_page=10):
     page_number = request.GET.get('page')
     paginator = Paginator(objects_list, per_page)
     try:
@@ -174,9 +174,6 @@ class ListNewQuestionsView(TemplateView):
         context.update({
             'questions': page_obj.object_list,
             'page_obj': page_obj,
-            'popular_tags': POPULAR_TAGS,
-            'top_users': TOP_USERS,
-            'user': USER_UNAUTHORIZED
         })
         return context
     
@@ -190,32 +187,22 @@ class ListHotQuestionsView(TemplateView):
         context.update({
             'questions': page_obj.object_list,
             'page_obj': page_obj,
-            'popular_tags': POPULAR_TAGS,
-            'top_users': TOP_USERS,
-            'user': USER_UNAUTHORIZED
         })
         return context      
 
 class AskFormView(TemplateView):
     template_name = "questions/ask.html"
-    
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context.update({
-            'popular_tags': POPULAR_TAGS,
-            'top_users': TOP_USERS,
-            'user': USER_UNAUTHORIZED
-        })
-        return context
 
 class QuestionView(TemplateView):
     template_name = "questions/question.html"
     
-    def get_context_data(self, question_id, **kwargs):
+    def get_context_data(self, **kwargs):
+        question_id = self.kwargs.get('question_id')
         context = super().get_context_data(**kwargs)
-        question = Question.objects.get_question(question_id)
-        if not question:
-            raise Http404("Вопрос не найден")
+        question = get_object_or_404(
+            Question.objects.select_related('author').prefetch_related('tags'), 
+            id=question_id
+        )
         
         answers = Answer.objects.get_answers(question_id)
         page_obj = paginate(answers, self.request)
@@ -223,9 +210,6 @@ class QuestionView(TemplateView):
             'question': question,
             'answers': page_obj.object_list,
             'page_obj': page_obj,
-            'popular_tags': POPULAR_TAGS,
-            'top_users': TOP_USERS,
-            'user': USER_UNAUTHORIZED
         })
         return context
     
@@ -254,8 +238,5 @@ class ListFoundQuestionsView(TemplateView):
             'search_query': tag_name,
             'questions': page_obj.object_list,
             'page_obj': page_obj,
-            'popular_tags': POPULAR_TAGS,
-            'top_users': TOP_USERS,
-            'user': USER_UNAUTHORIZED
         })
         return context
