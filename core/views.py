@@ -1,6 +1,10 @@
 from django.shortcuts import render
-from django.views.generic import TemplateView
+from django.urls import reverse_lazy
+from django.views.generic import TemplateView, CreateView
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.views import LoginView
+from django.contrib.auth import login
+from core.forms import LoginForm, RegistrationForm
 from core.models import Profile
 
 # POPULAR_TAGS = ['python', 'javascript', 'html', 'css', 'bootstrap', 'django', 'react', 'sql']
@@ -29,11 +33,20 @@ from core.models import Profile
 
 # Create your views here.
 
-class LoginView(TemplateView):
+class MyLoginView(LoginView):
     template_name = "core/login.html"
+    form_class = LoginForm
+    redirect_authenticated_user = False
     
-class SignupView(TemplateView):
+class SignupView(CreateView):
     template_name = "core/signup.html"
+    form_class = RegistrationForm
+    success_url = reverse_lazy('questions:index')
+    
+    def form_valid(self, form):
+        response = super().form_valid(form)
+        login(self.request, self.object)
+        return response
 
 class ProfiveView(LoginRequiredMixin, TemplateView):
     template_name = "core/profile.html"

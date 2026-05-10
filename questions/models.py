@@ -78,7 +78,7 @@ class Comment(models.Model):
     answer = models.ForeignKey(Answer, verbose_name="Ответ", on_delete=models.CASCADE, related_name="comments")
     author = models.ForeignKey(User, verbose_name="Автор", on_delete=models.CASCADE)
     content = models.TextField(verbose_name="Текст комментария")
-    created_at = models.DateField(verbose_name="Создан", auto_now=False, auto_now_add=False)
+    created_at = models.DateField(verbose_name="Создан", auto_now_add=True)
     is_active = models.BooleanField(verbose_name="Активно?", default=True)
 
     class Meta:

@@ -2,6 +2,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponse, Http404, JsonResponse
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.views.generic import TemplateView, RedirectView
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse
 
 from questions.models import Question, Answer
@@ -190,7 +191,7 @@ class ListHotQuestionsView(TemplateView):
         })
         return context      
 
-class AskFormView(TemplateView):
+class AskFormView(LoginRequiredMixin, TemplateView):
     template_name = "questions/ask.html"
 
 class QuestionView(TemplateView):

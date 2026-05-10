@@ -12,7 +12,10 @@
       >
       <span>{{ user.username|default:"Профиль" }}</span>
     </a>
-    <a class="btn btn-outline-light btn-sm" href="{% url "questions:index" %}" role="button">Выход</a>
+    <form action="{% url 'core:logout' %}" method="post" class="m-0 p-0">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-outline-light btn-sm">Выход</button>
+    </form>
   </div>
 {% else %}
 <div class="ms-2 ms-lg-3 me-3 d-flex gap-3 mt-3 mt-lg-0 align-items-baseline">
