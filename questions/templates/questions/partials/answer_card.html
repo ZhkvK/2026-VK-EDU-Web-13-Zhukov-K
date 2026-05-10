@@ -82,9 +82,17 @@
       <div class="collapse" id="collapse-{{ answer.id }}">
         <div class="border-top pt-3 mt-2">
           <!-- Комментарии -->
-          {% for comment in answer.comments.all %} 
+          {% for comment in answer.comments.all|slice:":3" %} 
           {% include "questions/partials/comment.html" %} 
           {% endfor %}
+          
+          {% if answer.comments.all|length > 3 %}
+            <div class="text-center mt-2">
+              <a href="#" class="btn w-80 load-more-comments">
+                Показать больше
+              </a>
+            </div>
+          {% endif %}
         </div>
         <div class="mt-5 mb-3 ms-3 me-3">
           <textarea
