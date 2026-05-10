@@ -40,18 +40,18 @@
           </p>
 
           <div class="d-flex align-items-center gap-2 vote-group">
-            <button type="button" class="btn btn-outline-success btn-sm btn-like border-0">
+            <button type="button" class="btn btn-outline-success btn-sm btn-like border-0" {% if not user.is_authenticated %} disabled {% endif %}>
                 <i class="bi bi-chevron-up fw-bold"></i>
             </button>
             
             <span class="vote-count fw-bold">{{ question.rating }}</span>
             
-            <button type="button" class="btn btn-outline-danger btn-sm btn-dislike border-0">
+            <button type="button" class="btn btn-outline-danger btn-sm btn-dislike border-0"  {% if not user.is_authenticated %} disabled {% endif %}>
                 <i class="bi bi-chevron-down fw-bold"></i>
             </button>
           </div>
         </div>
-        <div class="d-flex mt-2 gap-1 justify-content-between">
+        <div class="d-flex mt-2 gap-1 justify-content-start">
           {% for tag in question.tags.all %}
           <a
             href="{% url "questions:tag" tag %}"

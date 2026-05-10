@@ -1,10 +1,11 @@
 from django.shortcuts import render
 from django.urls import reverse_lazy
-from django.views.generic import TemplateView, CreateView
+from django.views.generic import TemplateView, CreateView, UpdateView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import LoginView
 from django.contrib.auth import login
-from core.forms import LoginForm, RegistrationForm
+from django.contrib import messages
+from core.forms import LoginForm, ProfileUpdateForm, RegistrationForm
 from core.models import Profile
 
 # POPULAR_TAGS = ['python', 'javascript', 'html', 'css', 'bootstrap', 'django', 'react', 'sql']
@@ -48,14 +49,15 @@ class SignupView(CreateView):
         login(self.request, self.object)
         return response
 
-class ProfiveView(LoginRequiredMixin, TemplateView):
+class ProfiveView(LoginRequiredMixin, UpdateView):
     template_name = "core/profile.html"
+    model = Profile
+    success_url = reverse_lazy('core:profile')
+    form_class = ProfileUpdateForm
     
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        user_id = self.kwargs.get('user_id') 
-        profile = Profile.objects.get_user(user_id)
-        context.update({
-            'profile': profile,
-        })
-        return context
+    def get_object(self):
+        return self.request.user.profile
+    
+    def form_valid(self, form):
+        messages.success(self.request, "Ваш профиль успешно обновлен!")
+        return super().form_valid(form)

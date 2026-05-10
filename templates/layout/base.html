@@ -70,7 +70,11 @@
                 </button>
                 <a
                   class="btn btn-primary flex-shrink-0"
-                  href="{% url 'questions:ask' %}"
+                  {% if user.is_authenticated %}
+                    href="{% url 'questions:ask' %}"
+                  {% else %}
+                    href="{% url 'core:login' %}"
+                  {% endif %}
                   role="button"
                   >+Ask!</a
                 >

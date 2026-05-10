@@ -1,156 +1,12 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponse, Http404, JsonResponse
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
-from django.views.generic import TemplateView, RedirectView
+from django.views.generic import CreateView, TemplateView, RedirectView
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.urls import reverse
+from django.urls import reverse, reverse_lazy
 
+from questions.forms import AddAnswerForm, AddCommentForm, AddQuestionForm
 from questions.models import Question, Answer
-
-
-# QUESTIONS = [
-#     {
-#         'id': i,
-#         'title': f"Вопрос {i}",
-#         'text': f"Текст для вопроса {i}",
-#         'answers': 3,
-#         'update': "3 минуты",
-#         'tags': ['python', 'javascript', 'html', 'css', 'bootstrap', 'django', 'react', 'sql'],
-#         'votes': [12, 2]
-#     }
-#     for i in range (1, 30)
-# ]
-
-# Заглушка для вопроса
-# QUESTION = {
-#     'id': 1,
-#     'title': 'Как настроить favicon в Bootstrap?',
-#     'text': '''This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.
-    
-# Можно использовать несколько абзацев для детального описания проблемы.''',
-#     'author': {'username': 'Username'},
-#     'created_at': '3 часа назад',
-#     'tags': ['python', 'django', 'html'],
-#     'votes': [50, 0],
-#     'answers_count': 3,
-#     # Права доступа (для отображения кнопок Редактировать/Удалить)
-#     'can_edit': True,
-#     'can_delete': True,
-# }
-
-# Заглушка для ответов с вложенными комментариями
-# ANSWERS = [
-#     {
-#         'id': 1,
-#         'text': 'This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.',
-#         'author': {'username': 'User1'},
-#         'updated_at': 'Обновлен 3 минуты назад',
-#         'votes': [50, 0],
-#         'is_correct': True,
-#         'comments': [
-#             {
-#                 'id': 101,
-#                 'author': {'username': 'User2'},
-#                 'created_at': '1 час назад',
-#                 'text': 'Спасибо за ответ! Это помогло.',
-#                 'votes': [50, 0],
-#             },
-#             {
-#                 'id': 102,
-#                 'author': {'username': 'User1'},
-#                 'created_at': '30 мин назад',
-#                 'text': 'Рад, что помогло! Обращайтесь.',
-#                 'votes': [50, 0],
-#             },
-#             {
-#                 'id': 103,
-#                 'author': {'username': 'User3'},
-#                 'created_at': '10 мин назад',
-#                 'text': 'А можно пример кода?',
-#                 'votes': [50, 0],
-#             },
-#         ],
-#     },
-#     {
-#         'id': 2,
-#         'text': 'This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.',
-#         'author': {'username': 'User2'},
-#         'updated_at': 'Обновлен 3 минуты назад',
-#         'votes': [50, 0],
-#         'is_correct': False,
-#         'comments': [
-#             {
-#                 'id': 201,
-#                 'author': {'username': 'User2'},
-#                 'created_at': '1 час назад',
-#                 'text': 'Спасибо за ответ! Это помогло.',
-#                 'votes': [50, 0],
-#             },
-#             {
-#                 'id': 202,
-#                 'author': {'username': 'User1'},
-#                 'created_at': '30 мин назад',
-#                 'text': 'Рад, что помогло! Обращайтесь.',
-#                 'votes': [50, 0],
-#             },
-#             {
-#                 'id': 203,
-#                 'author': {'username': 'User3'},
-#                 'created_at': '10 мин назад',
-#                 'text': 'А можно пример кода?',
-#                 'votes': [50, 0],
-#             },
-#         ],
-#     },
-#     {
-#         'id': 3,
-#         'text': 'This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.',
-#         'author': {'username': 'User3'},
-#         'updated_at': 'Обновлен 3 минуты назад',
-#         'votes': [50, 0],
-#         'is_correct': False,
-#         'comments': [
-#             {
-#                 'id': 201,
-#                 'author': {'username': 'User2'},
-#                 'created_at': '1 час назад',
-#                 'text': 'Спасибо за ответ! Это помогло.',
-#                 'votes': [50, 0],
-#             },
-#             {
-#                 'id': 202,
-#                 'author': {'username': 'User1'},
-#                 'created_at': '30 мин назад',
-#                 'text': 'Рад, что помогло! Обращайтесь.',
-#                 'votes': [50, 0],
-#             },
-#             {
-#                 'id': 203,
-#                 'author': {'username': 'User3'},
-#                 'created_at': '10 мин назад',
-#                 'text': 'А можно пример кода?',
-#                 'votes': [50, 0],
-#             },
-#         ],
-#     },
-# ]
-
-# Заглушка для боковой панели (теги и пользователи)
-# POPULAR_TAGS = ['python', 'javascript', 'html', 'css', 'bootstrap', 'django', 'react', 'sql']
-
-# TOP_USERS = [
-#     {'username': 'User1', 'reputation': 1234},
-#     {'username': 'User2', 'reputation': 987},
-#     {'username': 'User3', 'reputation': 756},
-# ]
-
-# USER_UNAUTHORIZED = {
-#     'username': "Dr.Pepper",
-#     'email': "dr.pepper@example.com",
-#     'avatar_image': "questions/img/Logo.png",
-#     'about': "Привет! Я увлекаюсь программированием и технологиями.",
-#     'is_Authorized': False
-# }
 
 def paginate(objects_list, request, per_page=10):
     page_number = request.GET.get('page')
@@ -191,8 +47,18 @@ class ListHotQuestionsView(TemplateView):
         })
         return context      
 
-class AskFormView(LoginRequiredMixin, TemplateView):
+class AskFormView(LoginRequiredMixin, CreateView):
     template_name = "questions/ask.html"
+    form_class = AddQuestionForm
+    
+    def form_valid(self, form):
+        form.instance.author = self.request.user
+        self.request.user.profile.update_activity()
+        return super().form_valid(form)
+    
+    def get_success_url(self):
+        return reverse('questions:question', kwargs={'question_id': self.object.id})
+
 
 class QuestionView(TemplateView):
     template_name = "questions/question.html"
@@ -211,9 +77,42 @@ class QuestionView(TemplateView):
             'question': question,
             'answers': page_obj.object_list,
             'page_obj': page_obj,
+            'form': AddAnswerForm()
         })
         return context
     
+    def post(self, request, *args, **kwargs):
+        question_id = self.kwargs.get('question_id')
+        question = get_object_or_404(Question, id=question_id)
+        
+        form = AddAnswerForm(request.POST)
+        if form.is_valid():
+            answer = form.save(commit=False)
+            answer.question = question
+            answer.author = request.user
+            answer.save()
+            self.request.user.profile.update_activity()
+            
+            return redirect(f'{reverse("questions:question", kwargs={"question_id": question_id})}#answer_{answer.id}')
+            
+        context = self.get_context_data(**kwargs)
+        context['form'] = form
+        return self.render_to_response(context)
+    
+class AddCommentView(LoginRequiredMixin, TemplateView):
+    def post(self, request, answer_id):
+        answer = get_object_or_404(Answer, id=answer_id)
+        
+        form = AddCommentForm(request.POST)
+        if form.is_valid():
+            comment = form.save(commit=False)
+            comment.answer = answer
+            comment.author = request.user
+            comment.save()
+            
+            return redirect('questions:question', question_id=answer.question.id)
+            
+        return redirect('questions:question', question_id=answer.question.id)
 
 class SearchView(RedirectView):
     pattern_name = 'questions:tag'

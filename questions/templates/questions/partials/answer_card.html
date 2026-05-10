@@ -1,6 +1,6 @@
 {% load static %}
 
-<div class="card mb-3">
+<div id="answer_{{ answer.id }}" class="card mb-3">
   <div class="row g-0">
     <div class="col-md-2">
       <div
@@ -31,6 +31,9 @@
             <button
               type="button"
               class="btn btn-outline-success btn-sm btn-like border-0"
+              {% if not user.is_authenticated %} 
+                disabled
+              {% endif %}
             >
               <i class="bi bi-chevron-up fw-bold"></i>
             </button>
@@ -40,6 +43,9 @@
             <button
               type="button"
               class="btn btn-outline-danger btn-sm btn-dislike border-0"
+              {% if not user.is_authenticated %} 
+              disabled
+              {% endif %}
             >
               <i class="bi bi-chevron-down fw-bold"></i>
             </button>
@@ -54,6 +60,7 @@
               value=""
               id="check-{{ answer.id }}"
               checked
+              {% if not user == question.author %} disabled {% endif %}
             />
             {% else %}
             <input
@@ -61,13 +68,14 @@
               type="checkbox"
               value=""
               id="check-{{ answer.id }}"
+              {% if not user == question.author %} disabled {% endif %}
             />
             {% endif %}
             <label class="form-check-label" for="check-{{ answer.id }}">
               Отметить правильным
             </label>
           </div>
-          {% comment %} <button
+          <button
             class="btn btn-link btn-sm text-muted p-0 text-decoration-none d-flex align-items-center gap-1"
             type="button"
             data-bs-toggle="collapse"
@@ -75,11 +83,11 @@
           >
             <i class="bi bi-chat-dots"></i>
             <span>Комментарии ({{ answer.comments.all|length }})</span>
-          </button> {% endcomment %}
+          </button>
         </div>
       </div>
 
-      {% comment %} <div class="collapse" id="collapse-{{ answer.id }}">
+      <div class="collapse" id="collapse-{{ answer.id }}">
         <div class="border-top pt-3 mt-2">
           <!-- Комментарии -->
           {% for comment in answer.comments.all|slice:":3" %} 
@@ -95,19 +103,17 @@
           {% endif %}
         </div>
         <div class="mt-5 mb-3 ms-3 me-3">
-          <textarea
-            class="form-control"
-            type="text"
-            id="AddComment"
-            rows="2"
-            maxlength="15000"
-            placeholder="Добавьте комментарий"
-          ></textarea>
+          {% if request.user.is_authenticated %}
+            <form method="post" action="{% url 'questions:add_comment' answer.id %}" class="mt-3 mb-3">
+                {% csrf_token %}
+                <div class="input-group input-group-sm gap-2">
+                    <input type="text" name="content" class="form-control" placeholder="Оставьте тут свой комментарий...">
+                    <button type="submit" class="btn btn-outline-success btn-sm">Отправить</button>
+                </div>
+            </form>
+          {% endif %}
         </div>
-        <div class="ms-3 mb-3">
-          <button type="button" class="btn btn-success">Отправить</button>
-        </div>
-      </div> {% endcomment %}
+      </div>
     </div>
   </div>
 </div>
