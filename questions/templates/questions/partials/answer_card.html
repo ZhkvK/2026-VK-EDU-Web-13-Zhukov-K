@@ -67,7 +67,7 @@
               Отметить правильным
             </label>
           </div>
-          <button
+          {% comment %} <button
             class="btn btn-link btn-sm text-muted p-0 text-decoration-none d-flex align-items-center gap-1"
             type="button"
             data-bs-toggle="collapse"
@@ -75,11 +75,11 @@
           >
             <i class="bi bi-chat-dots"></i>
             <span>Комментарии ({{ answer.comments.all|length }})</span>
-          </button>
+          </button> {% endcomment %}
         </div>
       </div>
 
-      <div class="collapse" id="collapse-{{ answer.id }}">
+      {% comment %} <div class="collapse" id="collapse-{{ answer.id }}">
         <div class="border-top pt-3 mt-2">
           <!-- Комментарии -->
           {% for comment in answer.comments.all|slice:":3" %} 
@@ -107,7 +107,7 @@
         <div class="ms-3 mb-3">
           <button type="button" class="btn btn-success">Отправить</button>
         </div>
-      </div>
+      </div> {% endcomment %}
     </div>
   </div>
 </div>

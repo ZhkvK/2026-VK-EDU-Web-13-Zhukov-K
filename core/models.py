@@ -7,6 +7,7 @@ class Profile(models.Model):
     user = models.OneToOneField(User, verbose_name="Пользователь", on_delete=models.CASCADE, related_name='profile')
     avatar = models.ImageField(upload_to='avatars/', null=True, blank=True, verbose_name="Аватар")
     bio = models.TextField(max_length=500, blank=True, verbose_name="О себе")
+    activity_count = models.IntegerField(verbose_name="Активность", default=0)
 
     objects = ProfileManager()
 

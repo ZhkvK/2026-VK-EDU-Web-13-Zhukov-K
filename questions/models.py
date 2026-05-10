@@ -1,12 +1,16 @@
 from django.db import models
 from django.contrib.auth.models import User
-
-from questions.managers import QuestionManager, AnswerManager
+from questions.managers import QuestionManager, AnswerManager, TagManager
+from django.db.models.signals import post_save, post_delete
+from django.dispatch import receiver
+from django.db.models import Sum
 
 
 # Create your models here.
 
 class Tag(models.Model):
+    
+    objects = TagManager()
 
     name = models.CharField(verbose_name="Название тега", max_length=50, unique=True)
     is_active = models.BooleanField(verbose_name="Активно?", default=True)
@@ -114,3 +118,33 @@ class AnswerLike(models.Model):
         unique_together = ('user', 'answer')
         verbose_name = "Лайк к ответу"
         verbose_name_plural = "Лайки к ответам"
+
+## Методы для обновления счетчиков
+@receiver([post_save, post_delete], sender=Question)
+@receiver([post_save, post_delete], sender=Answer)
+def update_profile_activity(sender, instance, **kwargs):
+    profile = instance.author.profile
+    q_count = Question.objects.filter(author=instance.author).count()
+    a_count = Answer.objects.filter(author=instance.author).count()
+    profile.activity_count = q_count + a_count
+    profile.save(update_fields=['activity_count'])
+
+@receiver([post_save, post_delete], sender=Answer)
+def update_question_answers_count(sender, instance, **kwargs):
+    question = instance.question
+    question.answers_count = question.answers.count()
+    question.save(update_fields=['answers_count'])
+
+@receiver([post_save, post_delete], sender=QuestionLike)
+def update_question_rating(sender, instance, **kwargs):
+    question = instance.question
+    rating = question.likes.aggregate(total=Sum('value'))['total'] or 0
+    question.rating = rating
+    question.save(update_fields=['rating'])
+
+@receiver([post_save, post_delete], sender=AnswerLike)
+def update_answer_rating(sender, instance, **kwargs):
+    answer = instance.answer
+    rating = answer.likes.aggregate(total=Sum('value'))['total'] or 0
+    answer.rating = rating
+    answer.save(update_fields=['rating'])
