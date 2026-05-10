@@ -2,9 +2,9 @@
 
 {% if user.is_authenticated  %}
 <div class="ms-2 ms-lg-3 me-3 d-flex gap-3 mt-3 mt-lg-0 align-items-center">
-    <a href="{% url 'core:profile' user.id %}" class="d-flex align-items-center link-light text-decoration-none gap-2">
+    <a href="{% url 'core:profile' %}" class="d-flex align-items-center link-light text-decoration-none gap-2">
       <img 
-        src="{% static 'questions/img/profile_image_dummy.png' %}" 
+        src="{{ user.profile.avatar.url }}" 
         alt="Аватар" 
         width="35" 
         height="35" 

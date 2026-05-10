@@ -27,3 +27,29 @@ class RegistrationForm(UserCreationForm):
         if commit:
             Profile.objects.create(user=user)
         return user
+    
+class ProfileUpdateForm(forms.ModelForm):
+    username = forms.CharField(label="Имя пользователя", required=True)
+    email = forms.EmailField(label="Email", required=True)
+    
+    class Meta:
+        model = Profile
+        fields = ['avatar', 'bio']
+        
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        if self.instance:
+            self.fields['username'].initial = self.instance.user.username
+            self.fields['email'].initial = self.instance.user.email
+            
+    def save(self, commit=True):
+        profile = super().save(commit=False)
+        user = profile.user
+        user.username = self.cleaned_data['username']
+        user.email = self.cleaned_data['email']
+    
+        if commit:
+            user.save()
+            profile.save()
+            
+        return profile

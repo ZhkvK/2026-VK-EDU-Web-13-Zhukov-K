@@ -1,11 +1,11 @@
 # 2026-VK-EDU-Web-13-Zhukov-K
 
 **Жуков К. П. Группа 4**  
-**Домашнее задание №3**
+**Домашнее задание №4**
 
 ## Описание проекта
 Веб-сервис для вопросов и ответов (клон Reddit/StackOverflow) на Django. 
-В рамках третьего ДЗ реализован перенос логики в модели и менеджеры (Fat Models), решена проблема N+1 запросов, подключена СУБД PostgreSQL, написан скрипт генерации тестовых данных и настроена Docker-конфигурация.
+В рамках четвертого ДЗ реализован добавлены Django-формы с валидацией и проверкой CSRF-токенов. Настроена авторизация и регистрация пользователей, изменение профиля, добавление вопросов, ответов и комментариев в ним. Так же выключена возможность выполнять некоторые действия (лайки, добавление ответов) для неавторизованных пользователей.
 
 
 
@@ -19,7 +19,7 @@
 | Создание вопроса | `questions/ask.html` | `/ask/` |
 | Вход | `core/login.html` | `/auth/login/` |
 | Регистрация | `core/signup.html` | `/auth/signup/` |
-| Профиль пользователя | `core/profile.html` | `/auth/profile/<int:user_id>/` |
+| Профиль пользователя | `core/profile.html` | `/auth/profile/` |
 | Поиск по тегу | `questions/tag.html` | `/tag/<str:tag_name>/` |
 
 ---
@@ -116,9 +116,12 @@ python manage.py runserver
 
 ```text
 asgiref==3.11.1
+beautifulsoup4==4.14.3
 certifi==2026.4.22
 charset-normalizer==3.4.7
-Django==6.0.3
+Django==4.2.30
+django-bootstrap-v5==1.0.11
+django-bootstrap5==26.2
 django-debug-toolbar==6.3.0
 django-environ==0.13.0
 Faker==40.15.0
@@ -126,8 +129,12 @@ idna==3.13
 packaging==26.2
 pillow==12.2.0
 psycopg2-binary==2.9.12
+python-decouple==3.8
 requests==2.33.1
+soupsieve==2.8.3
 sqlparse==0.5.5
+typing_extensions==4.15.0
 tzdata==2026.1
 urllib3==2.6.3
+vsixget==0.1.0
 ```

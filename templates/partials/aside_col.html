@@ -7,11 +7,17 @@
     <div class="card-header bg-white fw-bold">Популярные теги</div>
     <div class="card-body">
       <div class="d-flex flex-wrap gap-2">
-        {% for tag in popular_tags %}
-        <a href="{% url "questions:tag" tag %}" class="badge text-bg-primary text-decoration-none"
-          >{{tag}}</a
-        >
-        {% endfor %}
+        {% if popular_tags %}
+          {% for tag in popular_tags %}
+          <a href="{% url "questions:tag" tag %}" class="badge text-bg-primary text-decoration-none"
+            >{{tag}}</a
+          >
+          {% endfor %}
+        {% else %}
+          Пока нет ни одного вопроса с тегом :(
+          <a href="{% url "questions:ask" %}">Будь первым!</a>
+        {% endif %}
+        
       </div>
     </div>
   </div>
