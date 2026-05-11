@@ -1,12 +1,15 @@
+import json
+
 from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponse, Http404, JsonResponse
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
-from django.views.generic import CreateView, TemplateView, RedirectView
+from django.views.generic import CreateView, TemplateView, RedirectView, View
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse, reverse_lazy
+from django.template.loader import render_to_string
 
 from questions.forms import AddAnswerForm, AddCommentForm, AddQuestionForm
-from questions.models import Question, Answer
+from questions.models import AnswerLike, Comment, Question, Answer, QuestionLike
 
 def paginate(objects_list, request, per_page=10):
     page_number = request.GET.get('page')
@@ -92,6 +95,7 @@ class QuestionView(TemplateView):
             answer.author = request.user
             answer.save()
             self.request.user.profile.update_activity()
+            question.update_answer_count()
             
             return redirect(f'{reverse("questions:question", kwargs={"question_id": question_id})}#answer_{answer.id}')
             
@@ -140,3 +144,58 @@ class ListFoundQuestionsView(TemplateView):
             'page_obj': page_obj,
         })
         return context
+    
+class QuestionVoteView(LoginRequiredMixin, View):
+    def post(self, request, question_id):
+        try:
+            data = json.loads(request.body)
+            value = data.get('value')
+            
+            updated_rating = QuestionLike.objects.toggle_vote(request.user, question_id, value)
+            return JsonResponse({'status': 'ok', 'updated_rating': updated_rating})
+            
+        except Exception as e:
+            return JsonResponse({'status': 'error', 'error': str(e)}, status=400)
+        
+class AnswerVoteView(LoginRequiredMixin, View):
+    def post(self, request, answer_id):
+        try:
+            data = json.loads(request.body)
+            value = data.get('value')
+            
+            updated_rating = AnswerLike.objects.toggle_vote(request.user, answer_id, value)
+            return JsonResponse({'status': 'ok', 'updated_rating': updated_rating})
+            
+        except Exception as e:
+            return JsonResponse({'status': 'error', 'error': str(e)}, status=400)
+        
+class CorrectAnswerCheckView(LoginRequiredMixin, View):
+    def post(self, request, answer_id):
+        try:
+            data = json.loads(request.body)
+            is_correct = Answer.objects.check_correct(answer_id)
+            return JsonResponse({'status': 'ok', 'is_correct': is_correct})
+            
+        except Exception as e:
+            return JsonResponse({'status': 'error', 'error': str(e)}, status=400)
+        
+class LoadMoreCommentsView(View):
+    def post(self, request, answer_id):
+        try:
+            data = json.loads(request.body)
+            offset = int(data.get('offset', 3))
+            limit = 3
+            comments = Comment.objects.get_comments(answer_id, offset, limit)
+            
+            comments_html = ""
+            for comment in comments:
+                comments_html += render_to_string('questions/partials/comment.html', {'comment': comment}, request=request)
+                
+            total_comments = Comment.objects.filter(answer_id=answer_id).count()
+            has_more = (offset + limit) < total_comments
+            
+            return JsonResponse({'status': 'ok', 'html': comments_html, 'has_more': has_more})
+            
+        except Exception as e:
+            return JsonResponse({'status': 'error', 'error': str(e)}, status=400)
+            
