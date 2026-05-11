@@ -1,5 +1,6 @@
 from django import forms
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
+from django.core.validators import BaseValidator, FileExtensionValidator, EmailValidator
 
 from django.contrib.auth.models import User
 
@@ -10,7 +11,7 @@ class LoginForm(AuthenticationForm):
     password = forms.CharField(widget=forms.PasswordInput)
     
 class RegistrationForm(UserCreationForm):
-    email = forms.EmailField(required=True)
+    email = forms.EmailField(required=True, validators=[EmailValidator(message="Введите корректный email-адрес")],)
     
     class Meta:
         model = User
@@ -36,11 +37,21 @@ class ProfileUpdateForm(forms.ModelForm):
         model = Profile
         fields = ['avatar', 'bio']
         
+    class ImageSizeValidator(BaseValidator):
+        message = "Размер файла не должен превышать %(limit_value)s Мб."
+        code = None
+        def compare(self, file, max_size_mb):
+            return file and file.size > 1024 * 1024 * max_size_mb
+    
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         if self.instance:
             self.fields['username'].initial = self.instance.user.username
             self.fields['email'].initial = self.instance.user.email
+            self.fields['avatar'].validators += [
+                # FileExtensionValidator(allowed_extensions=['png', 'jpeg', 'jpg']),
+                self.ImageSizeValidator(2)
+            ]
             
     def save(self, commit=True):
         profile = super().save(commit=False)
