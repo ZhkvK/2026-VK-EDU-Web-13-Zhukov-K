@@ -11,7 +11,7 @@
 
           <div class="d-flex align-items-center gap-3 mb-4">
             <img
-              src="{% static 'questions/img/profile_image_dummy.png' %}"
+              src="{{ question.author.profile.avatar.url }}"
               class="rounded-circle"
               width="40"
               height="40"
@@ -45,11 +45,12 @@
           <div
             class="d-flex justify-content-between align-items-start pt-3 border-top align-items-md-baseline justify-content-md-between flex-md-row flex-column"
           >
-            <div class="d-flex align-items-center gap-2 vote-group mb-3 mb-md-0">
+            <div class="d-flex align-items-center gap-2 vote-group mb-3 mb-md-0"  data-object-id="{{ question.id }}" data-object-type="question">
               <button
                 type="button"
                 class="btn btn-outline-success btn-sm btn-like border-0"
-                {% if not user == question.author %} disabled {% endif %} 
+                data-value="1"
+                {% if not user.is_authenticated %} disabled {% endif %} 
               >
                 <i class="bi bi-chevron-up fw-bold"></i>
               </button>
@@ -59,7 +60,8 @@
               <button
                 type="button"
                 class="btn btn-outline-danger btn-sm btn-dislike border-0"
-                {% if not user == question.author %} disabled {% endif %}
+                {% if not user.is_authenticated %} disabled {% endif %}
+                data-value="-1"
               >
                 <i class="bi bi-chevron-down fw-bold"></i>
               </button>
