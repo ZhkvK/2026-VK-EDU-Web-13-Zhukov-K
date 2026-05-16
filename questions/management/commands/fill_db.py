@@ -1,7 +1,9 @@
 import random
 from django.core.management.base import BaseCommand
 from django.contrib.auth.models import User
-from questions.models import Question, Answer, Tag, QuestionLike, AnswerLike
+from django.db import connection
+from django.core.management import call_command
+from questions.models import Question, Answer, Comment, Tag, QuestionLike, AnswerLike
 from core.models import Profile
 from faker import Faker
 from collections import defaultdict
@@ -14,7 +16,31 @@ class Command(BaseCommand):
     def add_arguments(self, parser):
         parser.add_argument('ratio', type=int, help='Ratio for data generation')
 
+    def existing_table_check():
+        model_tables = [
+            Question._meta.db_table,
+            Answer._meta.db_table,
+            Comment._meta.db_table,
+            Tag._meta.db_table,
+            QuestionLike._meta.db_table,
+            AnswerLike._meta.db_table
+        ]
+        existing_tables = connection.introspection.table_names()
+        
+        return all(item in existing_tables for item in model_tables)
+            
+
     def handle(self, *args, **options):
+        
+        if ~self.existing_table_check:
+            self.stdout.write("Таблицы сущностей не найдены, выполняю миграции")
+            try:
+                call_command('migrate')
+                self.stdout.write(self.style.SUCCESS("Таблицы успешно созданы!"))
+            except Exception as e:
+                self.stdout.write(self.style.ERROR(f"Ошибка при создании таблиц: {e}"))
+                return
+        
         ratio = options['ratio']
         
         users_count = ratio
