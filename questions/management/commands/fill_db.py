@@ -32,13 +32,13 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         
-        if ~self.existing_table_check:
-            self.stdout.write("Таблицы сущностей не найдены, выполняю миграции")
+        if not self.existing_table_check:
+            self.stdout.write("Model tables are not found, migrating...")
             try:
                 call_command('migrate')
-                self.stdout.write(self.style.SUCCESS("Таблицы успешно созданы!"))
+                self.stdout.write(self.style.SUCCESS("Tables were successfully created"))
             except Exception as e:
-                self.stdout.write(self.style.ERROR(f"Ошибка при создании таблиц: {e}"))
+                self.stdout.write(self.style.ERROR(f"Error while creating tables: {e}"))
                 return
         
         ratio = options['ratio']
