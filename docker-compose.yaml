@@ -8,7 +8,12 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
     ports:
-      - "5432:5432"
+      - "5433:5432"
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "admin"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
 
   web:
     build: .
@@ -21,7 +26,8 @@ services:
     env_file:
       - .env.docker
     depends_on:
-      - db
+        db:
+          condition: service_healthy
     stdin_open: true
     tty: true
 
