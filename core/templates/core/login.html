@@ -1,0 +1,45 @@
+{% extends 'layout/base.html' %} {% load static %} 
+
+{% block content %}
+<main class="container flex-grow-1 mt-3 align-items-center">
+      <h1 class="text-center mt-5 mb-5">Добро пожаловать в AskApple!</h1>
+      <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <i class="bi bi-exclamation-triangle-fill"></i> Неверный логин или
+        пароль.
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="alert"
+        ></button>
+      </div>
+      <div class="mb-3">
+        <label for="formGroupExampleInput" class="form-label"
+          >Адрес электронной почты</label
+        >
+        <input
+          type="text"
+          class="form-control"
+          id="formGroupExampleInput"
+          placeholder="Введите e-mail"
+        />
+      </div>
+      <label for="inputPassword5" class="form-label">Пароль</label>
+      <input
+        type="password"
+        id="inputPassword5"
+        class="form-control"
+        placeholder="Введите пароль"
+        aria-describedby="passwordHelpBlock"
+      />
+      <div id="passwordHelpBlock" class="form-text mt-2">
+        <a href="#">Забыли пароль?</a>
+      </div>
+      <div class="form-text">
+        <a href="{% url 'core:signup' %}">Зарегистрироваться</a>
+      </div>
+
+      <div class="d-grid mt-5 mb-5">
+        <a class="btn btn-primary" href="{% url 'questions:index' %}" role="button">Войти</a>
+      </div>
+    </main>
+{% endblock content %}

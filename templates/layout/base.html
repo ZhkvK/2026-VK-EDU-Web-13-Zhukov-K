@@ -1,0 +1,99 @@
+{% load static %}
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Ask Apple</title>
+    <link
+      rel="icon"
+      type="image/png"
+      href="{% static 'questions/img/Logo.png' %}"
+    />
+    <link rel="stylesheet" href="{% static 'questions/css/bootstrap.css' %}" />
+    <link
+      rel="stylesheet"
+      href="{% static 'questions/css/bootstrap-icons.css' %}"
+    />
+  </head>
+
+  <body class="d-flex flex-column min-vh-100">
+    <!-- Навигация -->
+    <header>
+      <nav class="navbar navbar-expand-lg bg-dark" data-bs-theme="dark">
+        <div class="container">
+          <div class="d-flex align-items-center justify-content-between">
+            <a href="{% url 'questions:index' %}" class="text-decoration-none">
+              <img
+                src="{% static 'questions/img/Logo.png' %}"
+                alt="Logo"
+                class="rounded-circle"
+                width="50"
+                height="50"
+              />
+            </a>
+            <a class="navbar-brand" href="{% url 'questions:index' %}">AskApple</a>
+          </div>
+
+          <button
+            class="navbar-toggler"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent"
+            aria-expanded="false"
+            aria-label="Toggle navigation"
+          >
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div
+            class="collapse navbar-collapse flex-lg-row justify-content-lg-between ms-lg-4 mt-3 mt-lg-0"
+            id="navbarSupportedContent"
+          >
+            <form
+              class="d-flex flex-column flex-lg-row gap-2 justify-content-center"
+              role="search"
+              method="GET"
+              action="{% url 'questions:search' %}"
+            >
+              <input
+                class="form-control"
+                type="search"
+                placeholder="Найти вопрос по тегу"
+                name="tag"
+                value="{{ request.GET.tag }}"
+              />
+              <div class="d-flex gap-2 justify-content-lg-start">
+                <button class="btn btn-success flex-shrink-0" type="submit">
+                  Поиск
+                </button>
+                <a
+                  class="btn btn-primary flex-shrink-0"
+                  href="{% url 'questions:ask' %}"
+                  role="button"
+                  >+Ask!</a
+                >
+              </div>
+            </form>
+            {% include "core/partials/nav_auth_status.html" %}
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    {% block content %} {% endblock %}
+
+    <!-- Футер -->
+    <footer class="bg-dark text-white text-center py-3 mt-auto">
+      <div class="container">
+        <p class="mb-0">© 2026 Knowledge Base</p>
+      </div>
+    </footer>
+
+    <script src="{% static 'questions/js/bootstrap.bundle.js' %}"></script>
+
+    <!-- Скрипт для обработки логики лайков и дизлайков -->
+    <script src="{% static 'questions/js/main.js' %}"></script>
+  </body>
+</html>

@@ -1,0 +1,77 @@
+{% extends 'layout/base.html' %} {% load static %} {% block content %}
+<main class="container flex-grow-1 mt-3">
+  <div class="row p-0">
+    <section class="col-12 col-lg-9 order-2 order-lg-1">
+      <h1 class="mb-5">Настройки профиля</h1>
+
+      <form class="row g-3 needs-validation" novalidate>
+        <div class="col-md-6">
+          <label for="profileName" class="form-label">Имя</label>
+          <input
+            type="text"
+            class="form-control"
+            id="profileName"
+            maxlength="20"
+            required
+            value={{ user.username }}
+          />
+          <div class="invalid-feedback">
+            Имя должно содержать не более 20 символов и не быть пустым.
+          </div>
+        </div>
+
+        <div class="col-md-6">
+          <label for="profileEmail" class="form-label">E-mail</label>
+          <input
+            type="email"
+            class="form-control"
+            id="profileEmail"
+            required
+            value={{ user.email }}
+          />
+          <div class="invalid-feedback">
+            Пожалуйста, введите корректный адрес электронной почты.
+          </div>
+        </div>
+
+        <div class="col-12">
+          <label for="profileAvatar" class="form-label">Загрузить аватар</label>
+          <input
+            type="file"
+            class="form-control"
+            id="profileAvatar"
+            accept="image/*"
+          />
+          <div class="invalid-feedback">
+            Пожалуйста, выберите корректный файл изображения.
+          </div>
+          <div class="form-text">
+            Максимальный размер файла: 16 МБ. Форматы: JPG, PNG, GIF.
+          </div>
+        </div>
+
+        <div class="col-12">
+          <label for="profileAbout" class="form-label">О себе</label>
+          <textarea
+            class="form-control"
+            id="profileAbout"
+            rows="4"
+            maxlength="500"
+            required
+          >{{ profile.bio }}
+          </textarea>
+          <div class="invalid-feedback">
+            Текст не должен превышать 500 символов и не может быть пустым.
+          </div>
+          <div class="form-text">Максимум 500 символов.</div>
+        </div>
+
+        <div class="col-12 mb-4">
+          <button class="btn btn-primary" type="submit">Сохранить</button>
+        </div>
+      </form>
+    </section>
+    {% include "partials/aside_col.html" %}
+  </div>
+</main>
+{% endblock content %}
