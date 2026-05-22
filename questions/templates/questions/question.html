@@ -71,7 +71,7 @@
 
       <!-- Ответы -->
       {% if answers %}
-        {% for answer in answers.all%} 
+        {% for answer in answers%} 
         {% include "questions/partials/answer_card.html" %} 
         {% endfor %}
       {% else %}
