@@ -56,7 +56,8 @@ class ProfiveView(LoginRequiredMixin, UpdateView):
     form_class = ProfileUpdateForm
     
     def get_object(self):
-        return self.request.user.profile
+        profile, created = Profile.objects.get_or_create(user=self.request.user)
+        return profile
     
     def form_valid(self, form):
         messages.success(self.request, "Ваш профиль успешно обновлен!")
