@@ -1,0 +1,30 @@
+{% load static %}
+
+{% if user.is_authenticated  %}
+<div class="ms-2 ms-lg-3 me-3 d-flex gap-3 mt-3 mt-lg-0 align-items-center">
+    <a href="{% url 'core:profile' %}" class="d-flex align-items-center link-light text-decoration-none gap-2">
+      <img 
+        src="{{ user.profile.avatar.url }}" 
+        alt="Аватар" 
+        width="35" 
+        height="35" 
+        class="rounded-circle object-fit-cover"
+      >
+      <span>{{ user.username|default:"Профиль" }}</span>
+    </a>
+    <form action="{% url 'core:logout' %}" method="post" class="m-0 p-0">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-outline-light btn-sm">Выход</button>
+    </form>
+  </div>
+{% else %}
+<div class="ms-2 ms-lg-3 me-3 d-flex gap-3 mt-3 mt-lg-0 align-items-baseline">
+  <a href="{% url 'core:login' %}" class="link-light text-decoration-none"
+    >Войти</a
+  >
+  <a class="btn btn-light" href="{% url 'core:signup' %}" role="button"
+    >Регистрация</a
+  >
+</div>
+{% endif %}
+

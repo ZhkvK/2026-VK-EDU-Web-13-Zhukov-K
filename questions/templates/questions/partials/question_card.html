@@ -1,0 +1,66 @@
+{% load static %} 
+
+<div class="card mb-3">
+  <div class="row g-0">
+    <div class="col-lg-3">
+      <div
+        class="d-flex flex-row flex-lg-column align-items-center justify-content-lg-center h-100 p-3 gap-3 gap-lg-2 bg-light"
+      >
+        <a href="#" class="text-decoration-none">
+          <img
+            src="{% static 'questions/img/profile_image_dummy.png' %}"
+            class="rounded-circle"
+            alt="{{ question.author.username }}"
+            style="width: 60px; height: 60px; object-fit: cover"
+          />
+        </a>
+        <div class="d-flex align-items-center">
+          <a href="#" class="text-decoration-none text-center text-dark mb-lg-3"
+          >{{ question.author.username }}</a
+        >
+        </div>
+        <a href="{% url 'questions:question' question.id %}" class="text-decoration-none text-center"
+          >Ответы ({{ question.answers_count }})</a
+        >
+      </div>
+    </div>
+    <div class="col-lg-9">
+      <div class="card-body">
+        <h5 class="card-title">
+          <a href="{% url 'questions:question' question.id %}" class="text-decoration-none"
+            >{{ question.title }}</a
+          >
+        </h5>
+        <p class="card-text">{{ question.content }}</p>
+        <div class="d-flex justify-content-between align-items-baseline">
+          <p class="card-text mb-0">
+            <small class="text-body-secondary"
+              >Создан {{ question.created_at }} </small
+            >
+          </p>
+
+          <div class="d-flex align-items-center gap-2 vote-group">
+            <button type="button" class="btn btn-outline-success btn-sm btn-like border-0" {% if not user.is_authenticated %} disabled {% endif %}>
+                <i class="bi bi-chevron-up fw-bold"></i>
+            </button>
+            
+            <span class="vote-count fw-bold">{{ question.rating }}</span>
+            
+            <button type="button" class="btn btn-outline-danger btn-sm btn-dislike border-0"  {% if not user.is_authenticated %} disabled {% endif %}>
+                <i class="bi bi-chevron-down fw-bold"></i>
+            </button>
+          </div>
+        </div>
+        <div class="d-flex mt-2 gap-1 justify-content-start">
+          {% for tag in question.tags.all %}
+          <a
+            href="{% url "questions:tag" tag %}"
+            class="rounded-pill badge text-bg-primary text-decoration-none"
+            >{{tag.name}}</a
+          >
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
