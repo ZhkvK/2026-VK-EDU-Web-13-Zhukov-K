@@ -12,7 +12,9 @@
 
       {% if questions %}
         {% for question in questions %}
-        {% include 'questions/partials/question_card.html' %}
+          {% if question.is_active %}
+            {% include 'questions/partials/question_card.html' %}
+          {% endif %}
         {% endfor %}
       {% else %}
             <h4>Пока нет вопросов :(</h4>

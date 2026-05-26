@@ -7,7 +7,7 @@ def sidebar_data(request):
     top_users_key = "top_users"
     top_tags_key = "top_tags"
     
-    top_users = cache.get(top_tags_key)
+    top_users = cache.get(top_users_key)
     top_tags = cache.get(top_tags_key)
     
     if not top_users:

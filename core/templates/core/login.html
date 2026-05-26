@@ -1,4 +1,4 @@
-{% extends 'layout/base.html' %} {% load static %} {% load bootstrap5 %}
+{% extends 'layout/base.html' %} {% load static %} {% load django_bootstrap5 %}
 
 {% block content %}
 <main class="container flex-grow-1 mt-3 align-items-center">
@@ -6,11 +6,9 @@
         <form action="" method="POST">
           {% csrf_token %}
           {% bootstrap_form form %}
-          {% buttons %}
-            <button type="submit" class="btn btn-primary">
-              Войти
-            </button>
-          {% endbuttons %}
+          <button type="submit" class="btn btn-primary">
+            Войти
+          </button>
           {% comment %} {% if form.errors %}
             <div class="alert alert-danger alert-dismissible fade show" role="alert">
               <i class="bi bi-exclamation-triangle-fill"></i>

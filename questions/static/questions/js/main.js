@@ -70,7 +70,7 @@ document.addEventListener("DOMContentLoaded", () => {
   // ==========================================
   // 2. ЛОГИКА ПРАВИЛЬНОГО ОТВЕТА (AJAX)
   // ==========================================
-  const correctCheckboxes = document.querySelectorAll(".form-check-input[type='checkbox']");
+  const correctCheckboxes = document.querySelectorAll(".mark-correct-checkbox");
   
   correctCheckboxes.forEach((checkbox) => {
     checkbox.addEventListener("change", (e) => {

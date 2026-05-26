@@ -7,17 +7,17 @@ class AddQuestionForm(ModelForm):
     
     new_tags = forms.CharField(
         required=False,
-        label="Добавить новые теги",
+        label="Добавить теги",
         help_text="Введите названия через запятую (например: django, fastapi, new-tag)",
         widget=forms.TextInput(attrs={
             'class': 'form-control', 
-            'placeholder': 'Новые теги через запятую'
+            'placeholder': 'Теги через запятую'
         })
     )
     
     class Meta:
         model = Question
-        fields = ['is_active', 'title', 'content', 'tags']
+        fields = ['is_active', 'title', 'content']
         
     def save(self, commit=True):
         question = super().save(commit=commit)

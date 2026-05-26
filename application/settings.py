@@ -7,6 +7,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/6.0/ref/settings/
 """
 from pathlib import Path
+from celery.schedules import crontab
 import environ
 import os
 
@@ -41,7 +42,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'bootstrap5'
+    'django_bootstrap5'
 ]
 INSTALLED_APPS += ['questions', 'core']
 
@@ -126,14 +127,17 @@ if DEBUG:
     INTERNAL_IPS = ['127.0.0.1', '::1']
     
 # Centrifugo
-CENTRIFUGE_URL = "http://127.0.0.1:8001/api"
-CENTRIFUGE_HMAC_SECRET = "TxU6Y4oYdbdu009zAaNiBKrXv4-sJugHhSK9jE28nzfBpFgs3yPigzEkaqEYcKtDh1QIAjsSexA4zjPHrBcAbg"
-CENTRIFUGE_API_KEY = "iNg95jdHAMwSOnFUJD2fHOh4_fSNwb9ikC3jddW346HXObDcpDWud1xe7RZcIA2OQjhKIoAoH2MwYwp54q26yQ"
+CENTRIFUGE_URL = "http://127.0.0.1:8001/"
+CENTRIFUGE_HMAC_SECRET = "YP5atGkwznvJ__9GG_1kB5apJAFjRJRfola4UHse7GSmiLAQTezvNnnk9aiOo3C82GdwugUcpxgJS6vNSrZpHw"
+CENTRIFUGE_API_KEY = "29dZ8KSnmPLQtJmnmR1SqwFPBtrJuHQLzw1vKIWcLm7LEdKea-31mNophPMLi1h1vKC5Qeq5iikFFYwnxno5FQ"
 
 # Caches
 REDIS_HOST = '127.0.0.1'
 REDIS_PORT = '6379'
+
 REDIS_CACHE_DB = '1'
+REDIS_BROKER_DB = '2'
+REDIS_BEAT_DB = '3'
 
 CACHES = {
     "default": {
@@ -144,4 +148,19 @@ CACHES = {
 }
 
 # Celery
-CELERY_BROKER_URL = 'redis://localhost:6379/2'
+CELERY_BROKER_URL = f"redis://{REDIS_HOST}:{REDIS_PORT}/{REDIS_BROKER_DB}"
+CELERY_RESULT_BACKEND = f"redis://{REDIS_HOST}:{REDIS_PORT}/{REDIS_BEAT_DB}"
+CELERY_BEAT_SCHEDULER = "redbeat.RedBeatScheduler"
+CELERY_REDBEAT_REDIS_URL = f"redis://{REDIS_HOST}:{REDIS_PORT}/{REDIS_BEAT_DB}"
+
+CELERY_BEAT_SCHEDULE = {
+    'periodic_cache_refresh': {
+        'task': 'questions.tasks.refresh_cache_task',
+        'schedule': crontab(minute=5)
+    }
+}
+
+# Email
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+EMAIL_HOST = '127.0.0.1'
+EMAIL_PORT = '1025'

@@ -1,8 +1,8 @@
 import json
 import time
 
-from django.shortcuts import render, get_object_or_404, redirect
-from django.http import HttpResponse, Http404, JsonResponse
+from django.shortcuts import get_object_or_404, redirect
+from django.http import JsonResponse
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.views.generic import CreateView, TemplateView, RedirectView, View
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -10,11 +10,10 @@ from django.urls import reverse, reverse_lazy
 from django.template.loader import render_to_string
 from django.conf import settings
 
-from cent import Client, PublishRequest
-
 from core.models import Profile
 from questions.forms import AddAnswerForm, AddCommentForm, AddQuestionForm
 from questions.models import AnswerLike, Comment, Question, Answer, QuestionLike
+from questions.tasks import publish_to_centrifuge_task, send_email_task, update_answer_count_task, update_user_activity_task
 
 def paginate(objects_list, request, per_page=10):
     page_number = request.GET.get('page')
@@ -62,7 +61,7 @@ class AskFormView(LoginRequiredMixin, CreateView):
     def form_valid(self, form):
         form.instance.author = self.request.user
         profile, created = Profile.objects.get_or_create(user=self.request.user)
-        profile.update_activity()
+        update_user_activity_task.delay(profile)
         return super().form_valid(form)
     
     def get_success_url(self):
@@ -85,14 +84,6 @@ class QuestionView(TemplateView):
             token = token.decode('utf-8')
             
         return token
-    
-    def publish_to_centrifuge(self, channel, data):
-        api_url = f"{settings.CENTRIFUGE_URL}api"
-        api_key = f"{settings.CENTRIFUGE_API_KEY}"
-
-        client = Client(api_url, api_key)
-        request = PublishRequest(channel=channel, data=data)
-        result = client.publish(request)
     
     def get_context_data(self, **kwargs):
         question_id = self.kwargs.get('question_id')
@@ -123,9 +114,20 @@ class QuestionView(TemplateView):
             answer.question = question
             answer.author = request.user
             answer.save()
-            self.request.user.profile.update_activity()
-            question.update_answer_count()
-            self.publish_to_centrifuge(f"question:{question_id}", answer.to_json())
+            
+            html_content = render_to_string(
+                'questions/partials/answer_card.html', 
+                {
+                    'answer': answer,
+                    'question': question,
+                    'user': request.user,
+                    'request': request,
+                }
+            )
+            publish_to_centrifuge_task.delay(f"question:{question_id}", {"html": html_content})
+            update_answer_count_task.delay(question)
+            update_user_activity_task.delay(self.request.user.profile)
+            send_email_task.delay(question)
             
             return redirect(f'{reverse("questions:question", kwargs={"question_id": question_id})}#answer_{answer.id}')
             
@@ -177,7 +179,7 @@ class ListFoundQuestionsView(TemplateView):
             'questions': page_obj.object_list,
             'page_obj': page_obj,
         })
-        return context
+        return self.render_to_response(context)
     
 class QuestionVoteView(LoginRequiredMixin, View):
     def post(self, request, question_id):

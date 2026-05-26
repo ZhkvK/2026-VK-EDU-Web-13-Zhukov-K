@@ -12,6 +12,11 @@ class MyLoginView(LoginView):
     template_name = "core/login.html"
     form_class = LoginForm
     redirect_authenticated_user = False
+    def form_valid(self, form):
+        profile, created = Profile.objects.get_or_create(user=form.get_user())
+        profile.update_activity()
+        return super().form_valid(form)
+    
     
 class SignupView(CreateView):
     template_name = "core/signup.html"
