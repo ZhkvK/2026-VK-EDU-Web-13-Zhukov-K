@@ -75,13 +75,15 @@
       </div>
 
       <!-- Ответы -->
-      {% if answers %}
-        {% for answer in answers%} 
-        {% include "questions/partials/answer_card.html" %} 
-        {% endfor %}
-      {% else %}
-        <h4>Пока нет ответов :(</h4>
-      {% endif %}
+      <div id="answers-container">
+        {% if answers %}
+          {% for answer in answers%} 
+          {% include "questions/partials/answer_card.html" %} 
+          {% endfor %}
+        {% else %}
+          <h4 id="no-answers-msg">Пока нет ответов :(</h4>
+        {% endif %}
+      </div>
       
 
       <!-- Форма добавления ответа -->
@@ -103,4 +105,11 @@
     {% include "partials/aside_col.html" %}
   </div>
 </main>
+
+{{ connection_token|json_script:"centrifugo-token" }}
+{{ question.id|json_script:"question-id" }}
+{{ page_obj.number|json_script:"current-page" }}
+
+<script src="https://unpkg.com/centrifuge@5.0.1/dist/centrifuge.js"></script>
+<script src="{% static 'questions/js/question_realtime.js' %}"></script>
 {% endblock %}

@@ -124,3 +124,24 @@ if DEBUG:
     INSTALLED_APPS.append('debug_toolbar')
     MIDDLEWARE.insert(1, 'debug_toolbar.middleware.DebugToolbarMiddleware')
     INTERNAL_IPS = ['127.0.0.1', '::1']
+    
+# Centrifugo
+CENTRIFUGE_URL = "http://127.0.0.1:8001/api"
+CENTRIFUGE_HMAC_SECRET = "TxU6Y4oYdbdu009zAaNiBKrXv4-sJugHhSK9jE28nzfBpFgs3yPigzEkaqEYcKtDh1QIAjsSexA4zjPHrBcAbg"
+CENTRIFUGE_API_KEY = "iNg95jdHAMwSOnFUJD2fHOh4_fSNwb9ikC3jddW346HXObDcpDWud1xe7RZcIA2OQjhKIoAoH2MwYwp54q26yQ"
+
+# Caches
+REDIS_HOST = '127.0.0.1'
+REDIS_PORT = '6379'
+REDIS_CACHE_DB = '1'
+
+CACHES = {
+    "default": {
+        "BACKEND": "django.core.cache.backends.redis.RedisCache",
+        "LOCATION": f"redis://{REDIS_HOST}:{REDIS_PORT}/{REDIS_CACHE_DB}",
+        "TIMEOUT": 60 * 10,
+    }
+}
+
+# Celery
+CELERY_BROKER_URL = 'redis://localhost:6379/2'

@@ -1,4 +1,5 @@
 import json
+import time
 
 from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponse, Http404, JsonResponse
@@ -7,6 +8,9 @@ from django.views.generic import CreateView, TemplateView, RedirectView, View
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse, reverse_lazy
 from django.template.loader import render_to_string
+from django.conf import settings
+
+from cent import Client, PublishRequest
 
 from core.models import Profile
 from questions.forms import AddAnswerForm, AddCommentForm, AddQuestionForm
@@ -68,6 +72,28 @@ class AskFormView(LoginRequiredMixin, CreateView):
 class QuestionView(TemplateView):
     template_name = "questions/question.html"
     
+    def get_connection_token(self, user_id):
+        import jwt
+        sub = str(user_id) if user_id is not None else ""
+        payload = {
+            "sub": sub,
+            "exp": int(time.time()) + 10 * 60
+        }
+        
+        token = jwt.encode(payload, settings.CENTRIFUGE_HMAC_SECRET, algorithm="HS256")
+        if isinstance(token, bytes):
+            token = token.decode('utf-8')
+            
+        return token
+    
+    def publish_to_centrifuge(self, channel, data):
+        api_url = f"{settings.CENTRIFUGE_URL}api"
+        api_key = f"{settings.CENTRIFUGE_API_KEY}"
+
+        client = Client(api_url, api_key)
+        request = PublishRequest(channel=channel, data=data)
+        result = client.publish(request)
+    
     def get_context_data(self, **kwargs):
         question_id = self.kwargs.get('question_id')
         context = super().get_context_data(**kwargs)
@@ -82,7 +108,8 @@ class QuestionView(TemplateView):
             'question': question,
             'answers': page_obj.object_list,
             'page_obj': page_obj,
-            'form': AddAnswerForm()
+            'form': AddAnswerForm(),
+            'connection_token': self.get_connection_token(self.request.user.id)
         })
         return context
     
@@ -98,6 +125,7 @@ class QuestionView(TemplateView):
             answer.save()
             self.request.user.profile.update_activity()
             question.update_answer_count()
+            self.publish_to_centrifuge(f"question:{question_id}", answer.to_json())
             
             return redirect(f'{reverse("questions:question", kwargs={"question_id": question_id})}#answer_{answer.id}')
             

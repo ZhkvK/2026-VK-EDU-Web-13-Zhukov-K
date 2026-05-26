@@ -44,6 +44,19 @@ class Question(models.Model):
     def update_answer_count(self):
         self.answers_count = Answer.objects.get_answers(self.id).count()
         self.save(update_fields=['answers_count'])
+        
+    def to_json(self):
+        return {
+            "id": self.id,
+            "title": self.title,
+            "author": self.author.username,
+            "content": self.content,
+            "tags": list(self.tags),
+            "created_at": self.created_at.strftime('%d.%m.%Y %H.%m'),
+            "rating": self.rating,
+            "is_active": self.is_active,
+            "is_correct": self.is_correct
+        }
 
 class Answer(models.Model):
 
@@ -70,6 +83,18 @@ class Answer(models.Model):
     
     def __str__(self):
         return f"Ответ на вопрос \"{self.question}\""
+    
+    def to_json(self):
+        return {
+            "id": self.id,
+            "question": self.question,
+            "author": self.author,
+            "content": self.content,
+            "created_at": self.created_at.strftime('%d.%m.%Y %H.%m'),
+            "rating": self.rating,
+            "is_active": self.is_active,
+            "is_correct": self.is_correct
+        }
 
 
 class Comment(models.Model):
