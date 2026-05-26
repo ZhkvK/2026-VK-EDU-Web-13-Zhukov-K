@@ -198,4 +198,62 @@ document.addEventListener("DOMContentLoaded", () => {
       new bootstrap.Popover(wrapper);
     });
   }
+
+  // ПОИСКОВЫЕ ПОДСКАЗКИ (AJAX)
+  const searchInput = document.getElementById('search-input');
+  const searchDropdown = document.getElementById('search-dropdown');
+  let debounceTimer;
+
+  if (searchInput && searchDropdown) {
+    searchInput.addEventListener('input', function () {
+      clearTimeout(debounceTimer);
+      
+      const query = this.value.trim();
+
+      if (query.length < 2 && query !== '#') {
+        searchDropdown.classList.add('d-none');
+        searchDropdown.innerHTML = '';
+        return;
+      }
+
+      // Устанавливаем новый таймер (debounce 300мс)
+      debounceTimer = setTimeout(() => {
+        fetch(`/search/suggest/?q=${encodeURIComponent(query)}`)
+          .then(response => response.json())
+          .then(data => {
+            searchDropdown.innerHTML = ''; 
+
+            if (data.results.length > 0) {
+              data.results.forEach(item => {
+                const a = document.createElement('a');
+                a.href = item.url;
+                a.className = 'list-group-item list-group-item-action text-truncate';
+                a.textContent = item.text;
+                searchDropdown.appendChild(a);
+              });
+            } else {
+              const div = document.createElement('div');
+              div.className = 'list-group-item text-muted';
+              div.textContent = 'Ничего не найдено';
+              searchDropdown.appendChild(div);
+            }
+
+            searchDropdown.classList.remove('d-none');
+          })
+          .catch(error => console.error('Ошибка поиска:', error));
+      }, 300);
+    });
+
+    document.addEventListener('click', function (e) {
+      if (!searchInput.contains(e.target) && !searchDropdown.contains(e.target)) {
+        searchDropdown.classList.add('d-none');
+      }
+    });
+
+    searchInput.addEventListener('focus', function () {
+      if (searchDropdown.innerHTML.trim() !== '') {
+        searchDropdown.classList.remove('d-none');
+      }
+    });
+  }
 });

@@ -4,6 +4,8 @@ from questions.managers import AnswerVoteManager, CommentManager, QuestionManage
 from django.db.models.signals import post_save, post_delete
 from django.dispatch import receiver
 from django.db.models import Sum
+from django.contrib.postgres.indexes import GinIndex
+from django.contrib.postgres.search import SearchVector
 
 
 # Create your models here.
@@ -37,6 +39,12 @@ class Question(models.Model):
     class Meta:
         verbose_name="Вопрос"
         verbose_name_plural="Вопросы"
+        indexes = [
+            GinIndex(
+                SearchVector('title', 'content', config='russian'),
+                name='question_search_idx'
+            )
+        ]
 
     def __str__(self):
         return self.title

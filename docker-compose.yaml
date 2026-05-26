@@ -1,4 +1,4 @@
-version: '3.8'
+version: '3.9'
 
 services:
   db:
@@ -10,14 +10,37 @@ services:
     ports:
       - "5433:5432"
     healthcheck:
-      test: ["CMD", "pg_isready", "-U", "admin"]
+      test: ["CMD", "pg_isready", "-U", "admin", "-d", "questions"]
       interval: 5s
       timeout: 5s
       retries: 5
 
+  redis:
+    image: redis:8.8
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+
+  centrifugo:
+    image: centrifugo/centrifugo:v6
+    volumes:
+      - ./config.json:/centrifugo/config.json
+    command: centrifugo -c /centrifugo/config.json
+    ports:
+      - "8001:8001"
+    env_file:
+    - .env.docker
+
+  mailpit:
+    image: maildev/maildev:latest
+    ports:
+      - "1025:1025"
+      - "1080:1080"
+
   web:
     build: .
-    command: python manage.py runserver 0.0.0.0:8000
+    command: python manage.py runserver
     volumes:
       - .:/app                    
       - media_volume:/app/media/
@@ -26,11 +49,37 @@ services:
     env_file:
       - .env.docker
     depends_on:
-        db:
-          condition: service_healthy
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_started
     stdin_open: true
     tty: true
+
+  celery:
+    build: .
+    command: celery -A application worker -l INFO
+    volumes:
+      - .:/app
+      - media_volume:/app/media/
+    env_file:
+      - .env.docker
+    depends_on:
+      - redis
+      - db
+
+  celery-beat:
+    build: .
+    command: celery -A application beat -l INFO
+    volumes:
+      - .:/app
+    env_file:
+      - .env.docker
+    depends_on:
+      - redis
+      - db
 
 volumes:
   media_volume:
   postgres_data:
+  redis_data:

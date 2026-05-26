@@ -1,5 +1,6 @@
 import json
 import time
+import jwt
 
 from django.shortcuts import get_object_or_404, redirect
 from django.http import JsonResponse
@@ -9,10 +10,11 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse, reverse_lazy
 from django.template.loader import render_to_string
 from django.conf import settings
+from django.contrib.postgres.search import SearchVector, SearchQuery, SearchRank
 
 from core.models import Profile
 from questions.forms import AddAnswerForm, AddCommentForm, AddQuestionForm
-from questions.models import AnswerLike, Comment, Question, Answer, QuestionLike
+from questions.models import AnswerLike, Comment, Question, Answer, QuestionLike, Tag
 from questions.tasks import publish_to_centrifuge_task, send_email_task, update_answer_count_task, update_user_activity_task
 
 def paginate(objects_list, request, per_page=10):
@@ -60,8 +62,7 @@ class AskFormView(LoginRequiredMixin, CreateView):
     
     def form_valid(self, form):
         form.instance.author = self.request.user
-        profile, created = Profile.objects.get_or_create(user=self.request.user)
-        update_user_activity_task.delay(profile)
+        update_user_activity_task.delay(self.request.user.id)
         return super().form_valid(form)
     
     def get_success_url(self):
@@ -72,7 +73,6 @@ class QuestionView(TemplateView):
     template_name = "questions/question.html"
     
     def get_connection_token(self, user_id):
-        import jwt
         sub = str(user_id) if user_id is not None else ""
         payload = {
             "sub": sub,
@@ -125,9 +125,10 @@ class QuestionView(TemplateView):
                 }
             )
             publish_to_centrifuge_task.delay(f"question:{question_id}", {"html": html_content})
-            update_answer_count_task.delay(question)
-            update_user_activity_task.delay(self.request.user.profile)
-            send_email_task.delay(question)
+            update_answer_count_task.delay(question.id)
+            update_user_activity_task.delay(request.user.id)
+            if question.author.id != request.user.id:
+                send_email_task.delay(question.id)
             
             return redirect(f'{reverse("questions:question", kwargs={"question_id": question_id})}#answer_{answer.id}')
             
@@ -158,6 +159,42 @@ class SearchView(RedirectView):
             return reverse('questions:index')
             
         return reverse(self.pattern_name, kwargs={'tag_name': tag})
+    
+class SearchSuggestionView(View):
+    def get(self, request, *args, **kwargs):
+        query = request.GET.get('q', '').strip()
+        
+        if not query:
+            return JsonResponse({'results': []})
+
+        results = []
+        
+        # Если начинается с '#', ищем по тегам
+        if query.startswith('#'):
+            tag_name = query[1:]
+            if tag_name:
+                tags = Tag.objects.filter(name__icontains=tag_name, is_active=True)[:5]
+                for tag in tags:
+                    results.append({
+                        'text': f"#{tag.name}",
+                        'url': reverse('questions:tag', kwargs={'tag_name': tag.name})
+                    })
+        else:
+            vector = SearchVector('title', weight='A', config='russian') + \
+                     SearchVector('content', weight='B', config='russian')
+            search_query = SearchQuery(query, config='russian')
+            
+            questions = Question.objects.annotate(
+                rank=SearchRank(vector, search_query)
+            ).filter(rank__gte=0.001).order_by('-rank')[:5]
+
+            for q in questions:
+                results.append({
+                    'text': q.title,
+                    'url': reverse('questions:question', kwargs={'question_id': q.id})
+                })
+
+        return JsonResponse({'results': results})
 
 class ListFoundQuestionsView(TemplateView):
     template_name = "questions/tag.html"

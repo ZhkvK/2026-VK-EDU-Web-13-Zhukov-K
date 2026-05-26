@@ -1,13 +1,22 @@
 # 2026-VK-EDU-Web-13-Zhukov-K
 
 **Жуков К. П. Группа 4**  
-**Домашнее задание №5**
+**Домашнее задание №6**
 
 ## Описание проекта
 Веб-сервис для вопросов и ответов (клон Reddit/StackOverflow) на Django. 
-В рамках пятого ДЗ добавлены AJAX-запросы с валидацией и проверкой CSRF-токенов для лайков/дизлайков, чекбоксов правильного ответа и для подгрузки комментариев к ответу. Так же была добавлена работа с картинками (аватарами) -- загрузка с валидацией по размеру и типу файла, изменение названия с сохранением в MEDIA_ROOT/avatars/user_id/ и корректное отображение через url картинки.
 
+### Что добавлено в рамках ДЗ №6:
+1.  **Real-time обновления**: При добавлении нового ответа все пользователи на странице вопроса видят его мгновенно без перезагрузки страницы (используется **Centrifugo** и **Websockets**).
+2.  **Фоновые задачи (Celery)**: Тяжелые операции вынесены в фон:
+    *   Отправка Email-уведомлений автору вопроса о новом ответе.
+    *   Обновление счетчиков ответов и активности пользователей.
+    *   Инвалидация и прогрев кэша популярных тегов и пользователей по расписанию (**Celery Beat**).
+3.  **Полнотекстовый поиск (PostgreSQL FTS)**:
+    *   Поиск по заголовкам и контенту вопросов с использованием GIN-индексов.
+    *   Поисковые подсказки в шапке сайта с поддержкой тегов (через `#`) и поддержкой **Debounce** на фронтенде (снижение нагрузки на сервер).
 
+---
 
 ## Список страниц
 
@@ -26,36 +35,30 @@
 
 ## Вариант 1: Запуск через Docker Compose (Рекомендуемый)
 
-Это самый простой способ запуска, включающий в себя настроенную БД PostgreSQL.
+Убедитесь, что у вас установлены Docker и Docker Compose.
 
 ### 1. Настройка окружения
-Создайте файл `.env.docker` на основе примера. Впишите туда свои логины и пароли.
+Создайте файл `.env.docker` на основе шаблона:
 ```bash
-# Для Linux/macOS
 cp .env.example .env.docker
-
-# Для Windows
-Copy-Item .env.example -Destination .env.docker
 ```
+*В Docker-конфигурации уже прописаны верные имена хостов для взаимодействия контейнеров.*
 
-### 2. Сборка и запуск контейнеров
+### 2. Запуск всех сервисов
 ```bash
 docker-compose up --build -d
 ```
+Эта команда поднимет:
+- **web**: Django (порт 8000)
+- **db**: PostgreSQL 15
+- **redis**: Брокер задач и Кэш
+- **centrifugo**: Real-time сервер (порт 8001)
+- **celery/celery-beat**: Воркеры и планировщик задач
+- **maildev**: Интерфейс для просмотра исходящих писем (порт 1080)
 
-### 3. Применение миграций
+### 3. Базовая настройка (миграции и заполнение БД)
 ```bash
 docker-compose exec web python manage.py migrate
-```
-
-### 4. Генерация тестовых данных (опционально)
-Заполнение БД происходит через кастомную команду. Параметр ratio — это коэффициент генерации. После применения команды в базу должно быть добавлено:
-- пользователей — равное ratio;
-- вопросов — ratio * 10;
-- ответы — ratio * 100;
-- тэгов - ratio;
-- оценок пользователей - ratio * 200;
-```bash
 docker-compose exec web python manage.py fill_db 100
 ```
 
@@ -63,36 +66,33 @@ docker-compose exec web python manage.py fill_db 100
 
 ---
 
-## Вариант 2: Локальный запуск (Для разработки)
+## Вариант 2: Локальный запуск
 
-*Внимание: для локального запуска у вас должен быть установлен и запущен PostgreSQL на порту 5432.*
-
-### 1. Виртуальное окружение и зависимости
+### 1. Подготовка
 ```bash
 python -m venv venv
-# Активация: 
-venv\Scripts\activate       # (Win)
-source venv/bin/activate    # (Mac/Linux)
+source venv/bin/activate
 pip install -r requirements.txt
-```
-
-### 2. Настройка окружения
-Создайте файл `.env.local` и укажите данные для подключения к вашей локальной БД Postgres.
-```bash
 cp .env.example .env.local
 ```
-*(В файле `.env.local` убедитесь, что `DB_HOST=127.0.0.1`)*
 
-### 3. Миграции и заполнение БД
-```bash
-python manage.py migrate
-python manage.py fill_db [ratio]    # См. Вариант 1
-```
+### 2. Запуск окружения
+1.  **Postgres & Redis**: Должны быть запущены как службы (`sudo service ... start`).
+2.  **Centrifugo**: 
+    ```bash
+    ./centrifugo --config=config.json
+    ```
+3.  **Celery Worker**:
+    ```bash
+    celery -A application worker -l INFO
+    ```
+4.  **Django**:
+    ```bash
+    python manage.py migrate
+    python manage.py fill_db [ratio]    # См. Вариант 1
+    python manage.py runserver
+    ```
 
-### 4. Запуск сервера
-```bash
-python manage.py runserver
-```
 ---
 
 ## Структура проекта
@@ -115,26 +115,61 @@ python manage.py runserver
 ## Зависимости
 
 ```text
+aiohappyeyeballs==2.6.2
+aiohttp==3.13.5
+aiosignal==1.4.0
+amqp==5.3.1
+annotated-types==0.7.0
 asgiref==3.11.1
+attrs==26.1.0
 beautifulsoup4==4.14.3
+billiard==4.2.4
+celery==5.6.3
+celery-redbeat==2.3.3
+cent==5.2.0
 certifi==2026.4.22
+cffi==2.0.0
 charset-normalizer==3.4.7
-Django==4.2.30
-django-bootstrap-v5==1.0.11
+click==8.4.1
+click-didyoumean==0.3.1
+click-plugins==1.1.1.2
+click-repl==0.3.0
+cryptography==48.0.0
+Django==6.0.5
 django-bootstrap5==26.2
 django-debug-toolbar==6.3.0
 django-environ==0.13.0
 Faker==40.15.0
+frozenlist==1.8.0
+hiredis==3.3.1
 idna==3.13
+kombu==5.6.2
+multidict==6.7.1
 packaging==26.2
 pillow==12.2.0
+prompt_toolkit==3.0.52
+propcache==0.5.2
 psycopg2-binary==2.9.12
+pycparser==3.0
+pydantic==2.13.4
+pydantic_core==2.46.4
+PyJWT==2.13.0
+python-dateutil==2.9.0.post0
 python-decouple==3.8
+redis==7.4.0
 requests==2.33.1
+six==1.17.0
 soupsieve==2.8.3
 sqlparse==0.5.5
+tenacity==9.1.4
+types-requests==2.33.0.20260518
+typing-inspection==0.4.2
 typing_extensions==4.15.0
 tzdata==2026.1
+tzlocal==5.3.1
 urllib3==2.6.3
+vine==5.1.0
 vsixget==0.1.0
+wcwidth==0.7.0
+yarl==1.24.2
 ```

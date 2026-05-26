@@ -42,7 +42,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'django_bootstrap5'
+    'django_bootstrap5',
+    'django.contrib.postgres',
 ]
 INSTALLED_APPS += ['questions', 'core']
 
@@ -127,13 +128,13 @@ if DEBUG:
     INTERNAL_IPS = ['127.0.0.1', '::1']
     
 # Centrifugo
-CENTRIFUGE_URL = "http://127.0.0.1:8001/"
-CENTRIFUGE_HMAC_SECRET = "YP5atGkwznvJ__9GG_1kB5apJAFjRJRfola4UHse7GSmiLAQTezvNnnk9aiOo3C82GdwugUcpxgJS6vNSrZpHw"
-CENTRIFUGE_API_KEY = "29dZ8KSnmPLQtJmnmR1SqwFPBtrJuHQLzw1vKIWcLm7LEdKea-31mNophPMLi1h1vKC5Qeq5iikFFYwnxno5FQ"
+CENTRIFUGE_URL = env('CENTRIFUGE_URL', default="http://127.0.0.1:8001/")
+CENTRIFUGE_HMAC_SECRET = env('CENTRIFUGE_HMAC_SECRET', default="dummy-secret")
+CENTRIFUGE_API_KEY = env('CENTRIFUGE_API_KEY', default="dummy-api-key")
 
-# Caches
-REDIS_HOST = '127.0.0.1'
-REDIS_PORT = '6379'
+# Caches & Redis
+REDIS_HOST = env('REDIS_HOST', default='127.0.0.1')
+REDIS_PORT = env('REDIS_PORT', default='6379')
 
 REDIS_CACHE_DB = '1'
 REDIS_BROKER_DB = '2'
@@ -162,5 +163,5 @@ CELERY_BEAT_SCHEDULE = {
 
 # Email
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
-EMAIL_HOST = '127.0.0.1'
-EMAIL_PORT = '1025'
+EMAIL_HOST = env('EMAIL_HOST', default='127.0.0.1')
+EMAIL_PORT = env('EMAIL_PORT', cast=int, default=1025)
