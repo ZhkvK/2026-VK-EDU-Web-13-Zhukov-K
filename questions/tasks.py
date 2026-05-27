@@ -38,7 +38,7 @@ def send_email_task(question_id):
 
     send_mail(
         "Notification",
-        f"New answer to your question \"{question.content}\" was published!.",
+        f"New answer to your question \"{question.title}\" was published!.",
         "from@example.com",
         [question.author.email],
         fail_silently=False,
