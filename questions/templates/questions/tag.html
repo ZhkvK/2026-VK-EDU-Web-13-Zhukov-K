@@ -1,0 +1,35 @@
+{% extends 'layout/base.html' %} {% load static %} 
+
+{% block title %}
+
+{% endblock %} 
+
+{% block content %}
+<main class="container flex-grow-1 mt-3">
+  <div class="d-flex align-items-baseline gap-2 mb-3">
+    <h1>Результаты поиска по тегу {{search_query}} </h1>
+  </div>
+  <div class="row p-0">
+    {% if questions %}
+      <!-- Карточки -->
+      <section class="col-12 col-lg-9 order-2 order-lg-1">
+        {% for question in questions %}
+        {% include 'questions/partials/question_card.html' %}
+        {% endfor %}
+        {% if page_obj.has_previous or page_obj.has_next   %}
+          {% include 'questions/partials/pagination.html' %}
+        {% endif %}
+      </section>
+    {% else %}
+      <section class="col-12 col-lg-9 order-2 order-lg-1">
+        <div class="alert alert-danger">
+            <h4>Ничего не найдено</h4>
+            <p>По тегу <strong>{{ search_query }}</strong> нет вопросов.</p>
+            <a href="{% url 'questions:index' %}" class="btn btn-primary">Вернуться на главную</a>
+        </div>
+      </section>
+    {% endif %}
+    {% include "partials/aside_col.html" %}
+  </div>
+</main>
+{% endblock %}

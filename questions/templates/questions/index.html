@@ -1,0 +1,31 @@
+{% extends 'layout/base.html' %} {% load static %} 
+
+{% block content %}
+<main class="container flex-grow-1 mt-3">
+  <div class="d-flex align-items-baseline gap-2 mb-3">
+    <h1>Новые вопросы</h1>
+    <a href="{% url 'questions:hot' %}" class="ms-2">Популярное</a>
+  </div>
+  <div class="row p-0">
+    <!-- Карточки -->
+    <section class="col-12 col-lg-9 order-2 order-lg-1">
+      {% if questions %}
+        {% for question in questions %}
+          {% if question.is_active %}
+            {% include 'questions/partials/question_card.html' %}
+          {% endif %}
+        {% endfor %}
+      {% else %}
+            <h4>Пока нет вопросов :(</h4>
+            <div class="d-flex mt-5 mb-5">
+              <a href="{% url 'questions:ask' %}" class="btn btn-primary">Задать вопрос</a>
+            <div>
+      {% endif %}
+      {% if page_obj.has_previous or page_obj.has_next   %}
+        {% include 'questions/partials/pagination.html' %}
+      {% endif %}
+    </section>
+      {% include "partials/aside_col.html" %}
+  </div>
+</main>
+{% endblock %}
