@@ -2,6 +2,7 @@ import uuid
 
 from django.db import models
 from django.contrib.auth.models import User
+from django.templatetags.static import static
 from core.managers import ProfileManager
 
 class Profile(models.Model):
@@ -13,6 +14,15 @@ class Profile(models.Model):
     avatar = models.ImageField(upload_to=get_avatar_path, null=True, blank=True, verbose_name="Аватар", default='profile_image_dummy.png')
     bio = models.TextField(max_length=500, blank=True, verbose_name="О себе")
     activity_count = models.IntegerField(verbose_name="Активность", default=0)
+
+    @property
+    def avatar_url(self):
+        if self.avatar and self.avatar.name != 'profile_image_dummy.png':
+            try:
+                return self.avatar.url
+            except ValueError:
+                pass
+        return static('questions/img/profile_image_dummy.png')
 
     objects = ProfileManager()
 
