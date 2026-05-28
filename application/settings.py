@@ -26,7 +26,7 @@ env = environ.Env(
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-env_file = BASE_DIR / '.env.local'
+env_file = BASE_DIR / '.env.docker'
 if os.path.exists(env_file):
     environ.Env.read_env(env_file)
     
@@ -129,7 +129,7 @@ if DEBUG:
     
 # Centrifugo
 CENTRIFUGE_URL = env('CENTRIFUGE_URL', default="http://127.0.0.1:8001/")
-CENTRIFUGE_HMAC_SECRET = env('CENTRIFUGE_HMAC_SECRET', default="dummy-secret")
+CENTRIFUGE_TOKEN_HMAC_SECRET = env('CENTRIFUGE_TOKEN_HMAC_SECRET', default="dummy-secret")
 CENTRIFUGE_API_KEY = env('CENTRIFUGE_API_KEY', default="dummy-api-key")
 
 # Caches & Redis

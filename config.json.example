@@ -1,0 +1,29 @@
+{
+  "http_server" : {
+    "port": 8001
+  },
+  "client": {
+    "token": {
+      "hmac_secret_key": "your-secret-here"
+    },
+    "allowed_origins": [
+      "http://127.0.0.1",
+      "http://127.0.0.1:80",
+      "http://127.0.0.1:8000",
+      "http://ask.local"
+      ]
+  },
+  "channel": {
+    "namespaces": [
+      {
+        "name": "question",
+        "allow_subscribe_for_client": true,
+        "allow_subscribe_for_anonymous": true, 
+        "channel_regex": "^[\\d+]$"
+      }
+    ]
+  },
+  "http_api": {
+    "key": "your-key-here"
+  }
+}

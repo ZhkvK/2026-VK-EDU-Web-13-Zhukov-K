@@ -16,7 +16,7 @@ services:
       retries: 5
 
   redis:
-    image: redis:8.8
+    image: redis:7-alpine
     ports:
       - "6379:6379"
     volumes:
@@ -24,19 +24,43 @@ services:
 
   centrifugo:
     image: centrifugo/centrifugo:v6
-    volumes:
-      - ./config.json:/centrifugo/config.json
-    command: centrifugo -c /centrifugo/config.json
     ports:
       - "8001:8001"
     env_file:
     - .env.docker
+    volumes:
+      - ./config.json:/centrifugo/config.json
+    command: centrifugo -c /centrifugo/config.json
 
-  mailpit:
+  maildev:
     image: maildev/maildev:latest
     ports:
       - "1025:1025"
       - "1080:1080"
+
+  web:
+    build: .
+    command: >
+      sh -c "python manage.py collectstatic --noinput &&
+             gunicorn -c ./conf/gunicorn.py application.wsgi:application"
+    volumes:
+      - .:/app                    
+      - media_volume:/app/media/
+      - static_volume:/app/static/
+    ports:
+      - "8000:8000"
+    env_file:
+      - .env.docker
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_started
+    healthcheck:
+      test: ["CMD", "python3", "-c", "import socket; s = socket.socket(); s.connect(('127.0.0.1', 8000))"]
+      interval: 3s
+      timeout: 3s
+      retries: 10
 
   nginx:
     image: nginx:alpine
@@ -47,25 +71,8 @@ services:
       - static_volume:/app/static:ro
       - media_volume:/app/media:ro
     depends_on:
-      - web
-
-  web:
-    build: .
-    command: python manage.py runserver
-    volumes:
-      - .:/app                    
-      - media_volume:/app/media/
-    ports:
-      - "8000:8000"
-    env_file:
-      - .env.docker
-    depends_on:
-      db:
+      web:
         condition: service_healthy
-      redis:
-        condition: service_started
-    stdin_open: true
-    tty: true
 
   celery:
     build: .

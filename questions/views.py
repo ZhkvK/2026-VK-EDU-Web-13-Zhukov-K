@@ -79,7 +79,7 @@ class QuestionView(TemplateView):
             "exp": int(time.time()) + 10 * 60
         }
         
-        token = jwt.encode(payload, settings.CENTRIFUGE_HMAC_SECRET, algorithm="HS256")
+        token = jwt.encode(payload, settings.CENTRIFUGE_TOKEN_HMAC_SECRET, algorithm="HS256")
         if isinstance(token, bytes):
             token = token.decode('utf-8')
             

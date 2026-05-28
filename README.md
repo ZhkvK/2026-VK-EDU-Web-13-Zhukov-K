@@ -1,20 +1,21 @@
 # 2026-VK-EDU-Web-13-Zhukov-K
 
 **Жуков К. П. Группа 4**  
-**Домашнее задание №6**
+**Домашнее задание №7**
 
 ## Описание проекта
 Веб-сервис для вопросов и ответов (клон Reddit/StackOverflow) на Django. 
 
-### Что добавлено в рамках ДЗ №6:
-1.  **Real-time обновления**: При добавлении нового ответа все пользователи на странице вопроса видят его мгновенно без перезагрузки страницы (используется **Centrifugo** и **Websockets**).
-2.  **Фоновые задачи (Celery)**: Тяжелые операции вынесены в фон:
-    *   Отправка Email-уведомлений автору вопроса о новом ответе.
-    *   Обновление счетчиков ответов и активности пользователей.
-    *   Инвалидация и прогрев кэша популярных тегов и пользователей по расписанию (**Celery Beat**).
-3.  **Полнотекстовый поиск (PostgreSQL FTS)**:
-    *   Поиск по заголовкам и контенту вопросов с использованием GIN-индексов.
-    *   Поисковые подсказки в шапке сайта с поддержкой тегов (через `#`) и поддержкой **Debounce** на фронтенде (снижение нагрузки на сервер).
+### Что добавлено в рамках ДЗ №7:
+1.  **Gunicorn**: Приложение запускается через WSGI-сервер Gunicorn (используется 2 воркера, таймаут 120с).
+2.  **Nginx как Reverse Proxy**: 
+    *   Проксирование динамических запросов на Gunicorn (с балансировкой нагрузки между инстансами).
+    *   **Отдача статики и медиа**: Настроена эффективная раздача файлов по расширениям и префиксам (gzip, кэширование).
+    *   **Proxy Cache**: Настроено кэширование ответов бэкенда, что кратно увеличивает производительность.
+3.  **Автономный WSGI**: Реализован легковесный WSGI-скрипт (`mywsgi.py`) для демонстрации работы протокола без Django.
+4.  **Нагрузочное тестирование**: Проведено сравнение производительности Nginx и Gunicorn с помощью `ab`.
+
+**Отчет нагрузочного тестирования приведен в [файле](PerformanceReport.md).**
 
 ---
 
@@ -33,7 +34,7 @@
 
 ---
 
-## Вариант 1: Запуск через Docker Compose (Рекомендуемый)
+## Запуск через Docker Compose
 
 Убедитесь, что у вас установлены Docker и Docker Compose.
 
@@ -41,20 +42,15 @@
 Создайте файл `.env.docker` на основе шаблона:
 ```bash
 cp .env.example .env.docker
+cp config.json.example config.json
 ```
-*В Docker-конфигурации уже прописаны верные имена хостов для взаимодействия контейнеров.*
+*В Docker-конфигурации уже прописаны верные имена хостов для взаимодействия контейнеров. В файле config.json содержатся настройки неймспейсов и доступов для Centrifugo.*
 
 ### 2. Запуск всех сервисов
 ```bash
 docker-compose up --build -d
 ```
-Эта команда поднимет:
-- **web**: Django (порт 8000)
-- **db**: PostgreSQL 15
-- **redis**: Брокер задач и Кэш
-- **centrifugo**: Real-time сервер (порт 8001)
-- **celery/celery-beat**: Воркеры и планировщик задач
-- **maildev**: Интерфейс для просмотра исходящих писем (порт 1080)
+*Команда автоматически соберет статику, применит миграции (если настроен entrypoint) и поднимет Nginx, Gunicorn, Postgres, Redis, Celery и Centrifugo.*
 
 ### 3. Базовая настройка (миграции и заполнение БД)
 ```bash
@@ -62,36 +58,7 @@ docker-compose exec web python manage.py migrate
 docker-compose exec web python manage.py fill_db 100
 ```
 
-Сайт будет доступен по адресу: `http://127.0.0.1:8000/`
-
----
-
-## Вариант 2: Локальный запуск
-
-### 1. Подготовка
-```bash
-python -m venv venv
-source venv/bin/activate
-pip install -r requirements.txt
-cp .env.example .env.local
-```
-
-### 2. Запуск окружения
-1.  **Postgres & Redis**: Должны быть запущены как службы (`sudo service ... start`).
-2.  **Centrifugo**: 
-    ```bash
-    ./centrifugo --config=config.json
-    ```
-3.  **Celery Worker**:
-    ```bash
-    celery -A application worker -l INFO
-    ```
-4.  **Django**:
-    ```bash
-    python manage.py migrate
-    python manage.py fill_db [ratio]    # См. Вариант 1
-    python manage.py runserver
-    ```
+Сайт будет доступен по адресу: `http://127.0.0.1/`
 
 ---
 
@@ -99,18 +66,18 @@ cp .env.example .env.local
 
 ```text
 .
-├── application/          # Главный проект Django (settings, urls)
+├── conf/
+│   ├── nginx_docker.conf # Конфиг Nginx для контейнера
+|   └── gunicorn.py       # Конфигурация Gunicorn (workers=2, timeout=120)
+├── application/          # Настройки
 ├── core/                 # Приложение пользователей (auth, profile)
-├── questions/            # Приложение Q&A (models, views, managers)
-│   └── management/       
-│       └── commands/     
-│           └── fill_db.py # Скрипт генерации данных
-├── media/                # Пользовательские файлы (аватары)
-├── requirements.txt      # Зависимости Python
-├── docker-compose.yml    # Конфигурация Docker Compose (web + db)
-├── Dockerfile            # Инструкция сборки web-контейнера
-└── .env.example          # Шаблон переменных окружения
+├── questions/            # Приложение Q&A (models, views, managers, tasks)
+├── mywsgi.py             # Автономный WSGI-скрипт
+├── docker-compose.yml    # Описание всей инфраструктуры (web, db, redis, nginx...)
+└── Dockerfile            # Сборка на базе python:3-14
 ```
+
+---
 
 ## Зависимости
 
@@ -141,6 +108,7 @@ django-debug-toolbar==6.3.0
 django-environ==0.13.0
 Faker==40.15.0
 frozenlist==1.8.0
+gunicorn==26.0.0
 hiredis==3.3.1
 idna==3.13
 kombu==5.6.2

@@ -14,11 +14,9 @@
   <form method="POST" enctype="multipart/form-data" novalidate>
     {% csrf_token %}
     
-    {% if user.profile.avatar %}
-      <div class="text-center mb-3">
-        <img src="{{ user.profile.avatar.url }}" alt="Аватар" class="rounded-circle" width="100" height="100" style="object-fit: cover;">
-      </div>
-    {% endif %}
+    <div class="text-center mb-3">
+      <img src="{{ user.profile.avatar_url }}" alt="Аватар" class="rounded-circle" width="100" height="100" style="object-fit: cover;">
+    </div>
 
     {% bootstrap_form form %}
     
