@@ -29,7 +29,7 @@ services:
     env_file:
     - .env.docker
     volumes:
-      - ./config.json:/centrifugo/config.json
+      - ./centrifugo/:/centrifugo/
     command: centrifugo -c /centrifugo/config.json
 
   maildev:
