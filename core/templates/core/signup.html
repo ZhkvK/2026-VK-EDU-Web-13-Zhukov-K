@@ -1,0 +1,101 @@
+{% extends 'layout/base.html' %} {% load static %} {% load django_bootstrap5 %}
+{% block content %}
+<main class="container flex-grow-1 mt-3 align-items-center">
+  
+  <h1 class="text-center mt-5 mb-5">Добро пожаловать в AskApple!</h1>
+
+      <form class="row g-3" method='POST'>
+        {% csrf_token %}
+        {% bootstrap_form form %}
+          <button type="submit" class="btn btn-primary">
+            Зарегистрироваться
+          </button>
+        {% comment %} <div class="form-group">
+          {{ form.errors }}
+        </div> 
+
+        <div class="col-12">
+          <label for="email" class="form-label"
+            >Адрес электронной почты</label
+          >
+          <input
+            type="email"
+            class="form-control"
+            id="email"
+            name='email'
+          />
+        </div>
+
+        <div class="col-12">
+          <label for="username" class="form-label"
+            >Имя пользователя</label
+          >
+          <input
+            type="text"
+            class="form-control"
+            id="username"
+            name='username'
+            required
+            minlength="3"
+            maxlength="20"
+          />
+        </div>
+
+        <div class="col-12">
+          <label for="password" class="form-label">Пароль</label>
+          <input
+            type="password"
+            class="form-control"
+            id="password1"
+            name='password1'
+            required
+            minlength="8"
+            maxlength="20"
+          />
+        </div>
+
+        <div class="col-12">
+          <label for="password" class="form-label">Подтверждение пароля</label>
+          <input
+            type="password"
+            class="form-control"
+            id="password2"
+            name='password2'
+            required
+            minlength="8"
+            maxlength="20"
+          />
+        </div>
+
+        <div class="col-12">
+          <div class="form-check">
+            <input
+              class="form-check-input"
+              type="checkbox"
+              value=""
+              id="invalidCheck2"
+              required
+            />
+            <label class="form-check-label" for="invalidCheck2">
+              Agree to terms and conditions
+            </label>
+            <div class="invalid-feedback">
+              Вы должны согласиться с условиями перед отправкой.
+            </div>
+          </div>
+        </div>
+
+        <div class="col-12">
+          <button class="btn btn-primary" type="submit" value="Register">
+            Зарегистрироваться
+          </button>
+        </div>
+       {% endcomment %}
+      </form>
+
+      <div class="mt-3">
+        <p>Уже есть аккаунт? <a href="{% url 'core:login' %}">Войти</a></p>
+      </div>
+    </form>
+    </main>
+{% endblock content %}
