@@ -1,0 +1,18 @@
+{% extends 'layout/base.html' %} {% load static %}
+{% load bootstrap5 %}
+{% block content %}
+<main class="container flex-grow-1 mt-3">
+  <h1 class="mb-5">Новый вопрос</h1>
+  <!-- Вопрос -->
+  <div class="row p-0">
+    <section class="col-12 col-lg-9 order-2 order-lg-1">
+      <form method="post" novalidate>
+        {% csrf_token %}
+        {% bootstrap_form form %}
+        <button type="submit" class="btn btn-primary mt-3 mb-5">Ask!</button>
+      </form>
+    </section>
+    {% include "partials/aside_col.html" %}
+  </div>
+</main>
+{% endblock %}

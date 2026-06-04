@@ -1,0 +1,124 @@
+{% load static %}
+
+<div id="answer_{{ answer.id }}" class="card mb-3">
+  <div class="row g-0">
+    <div class="col-md-2">
+      <div
+        class="d-flex flex-row flex-md-column align-items-center justify-content-md-center h-100 p-3 gap-3 gap-md-2 bg-light"
+      >
+        <a href="#" class="text-decoration-none">
+          <img
+            src="{{ answer.author.profile.avatar_url }}"
+            class="rounded-circle"
+            alt="User2"
+            style="width: 60px; height: 60px; object-fit: cover"
+          />
+        </a>
+        <a href="#" class="text-decoration-none text-center"
+          >{{answer.author.username}}</a
+        >
+      </div>
+    </div>
+    <div class="col-md-10">
+      <div class="card-body">
+        <p class="card-text">{{answer.content}}</p>
+        <div class="d-flex justify-content-between align-items-baseline">
+          <p class="card-text mb-0">
+            <small class="text-body-secondary">{{answer.created_at}}</small>
+          </p>
+
+          <div class="d-flex align-items-center gap-2 vote-group" data-object-id="{{ answer.id }}" data-object-type="answer">
+            <button
+              type="button"
+              class="btn btn-outline-success btn-sm btn-like border-0"
+              {% if not user.is_authenticated %} 
+                disabled
+              {% endif %}
+              data-value="1"
+            >
+              <i class="bi bi-chevron-up fw-bold"></i>
+            </button>
+
+            <span class="vote-count fw-bold">{{ answer.rating }}</span>
+
+            <button
+              type="button"
+              class="btn btn-outline-danger btn-sm btn-dislike border-0"
+              {% if not user.is_authenticated %} 
+              disabled
+              {% endif %}
+              data-value="-1"
+            >
+              <i class="bi bi-chevron-down fw-bold"></i>
+            </button>
+          </div>
+        </div>
+        <div class="d-flex flex-column flex-md-row align-items-start align-items-md-baseline justify-content-md-between gap-2 mt-3">
+          <div class="form-check" data-object-id="{{ answer.id }}" data-object-type="answer">
+            {% if answer.is_correct %}
+            <input
+              class="form-check-input"
+              type="checkbox"
+              value=""
+              id="check-{{ answer.id }}"
+              checked
+              {% if not user == question.author %} disabled {% endif %}
+            />
+            {% else %}
+            <input
+              class="form-check-input"
+              type="checkbox"
+              value=""
+              id="check-{{ answer.id }}"
+              {% if not user == question.author %} disabled {% endif %}
+            />
+            {% endif %}
+            <label class="form-check-label" for="check-{{ answer.id }}">
+              Отметить правильным
+            </label>
+          </div>
+          <button
+            class="btn btn-link btn-sm text-muted p-0 text-decoration-none d-flex align-items-center gap-1"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#collapse-{{ answer.id }}"
+          >
+            <i class="bi bi-chat-dots"></i>
+            <span>Комментарии ({{ answer.comments.all|length }})</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="collapse" id="collapse-{{ answer.id }}">
+        <div class="border-top pt-3 mt-2">
+          <!-- Комментарии -->
+          {% for comment in answer.comments.all|slice:":3" %} 
+          {% include "questions/partials/comment.html" %} 
+          {% endfor %}
+          
+          {% if answer.comments.all|length > 3 %}
+            <div class="text-center mt-2 load-more-wrapper" id="load-more-wrapper-{{ answer.id }}">
+              <a href="#" class="btn w-80 load-more-comments"
+                data-answer-id="{{ answer.id }}"
+                data-offset="3"
+                >
+                Показать больше
+              </a>
+            </div>
+          {% endif %}
+        </div>
+        <div class="mt-5 mb-3 ms-3 me-3">
+          {% if request.user.is_authenticated %}
+            <form method="post" action="{% url 'questions:add_comment' answer.id %}" class="mt-3 mb-3">
+                {% csrf_token %}
+                <div class="input-group input-group-sm gap-2">
+                    <input type="text" name="content" class="form-control" placeholder="Оставьте тут свой комментарий...">
+                    <button type="submit" class="btn btn-outline-success btn-sm">Отправить</button>
+                </div>
+            </form>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
